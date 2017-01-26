@@ -1,4 +1,4 @@
-require "mumukit/login/version"
+require_relative './login/version'
 
 require 'addressable/uri'
 
@@ -28,220 +28,6 @@ module Mumukit::Login
   end
 end
 
-class Mumukit::Login::Settings
-  LOCK_LOGIN_METHODS = {
-      facebook: 'facebook',
-      github: 'github',
-      google: 'google-oauth2',
-      twitter: 'twitter',
-      user_pass: 'Username-Password-Authentication'
-  }
-
-  attr_accessor :login_methods
-
-  def initialize(login_methods = Mumukit::Login::Settings.default_methods)
-    @login_methods = login_methods.map(&:to_sym)
-  end
-
-  def many_methods?
-    user_pass? && social_login_methods.size > 1
-  end
-
-  def user_pass?
-    login_methods.include? :user_pass
-  end
-
-  def social_login_methods
-    login_methods - [:user_pass]
-  end
-
-  def to_lock_json(callback_url, options={})
-    lock_json
-        .merge(callbackURL: callback_url, responseType: 'code', authParams: {scope: 'openid profile'})
-        .merge(options)
-        .to_json
-        .html_safe
-  end
-
-  def lock_json
-    {dict: I18n.locale,
-     connections: lock_login_methods,
-     icon: '/logo-alt.png',
-     socialBigButtons: !many_methods?,
-     disableResetAction: false}
-  end
-
-  def lock_login_methods
-    login_methods.map { |it| LOCK_LOGIN_METHODS[it] }
-  end
-
-  def self.login_methods
-    LOCK_LOGIN_METHODS.keys
-  end
-
-  def self.default_methods
-    [:user_pass]
-  end
-end
-
-class Mumukit::Login::OriginRedirector
-  def initialize(controller)
-    @controller = controller
-  end
-
-  def redirect!
-    @controller.redirect!(@controller.session[:redirect_after_login] || '/')
-  end
-
-  def save_location!
-    @controller.session[:redirect_after_login] = Addressable::URI.heuristic_parse(origin).path
-  end
-
-  private
-
-  def origin
-    @controller.request.params['origin']
-  end
-end
-
-class Mumukit::Login::Controller
-  def initialize(framework, native)
-    @framework = framework
-    @native = native
-  end
-
-  def env
-    @framework.env @native
-  end
-
-  def redirect!(path)
-    @framework.redirect!(path, @native)
-  end
-
-  def render_html!(html)
-    @framework.render_html!(html, @native)
-  end
-
-  def request
-    Rack::Request.new(env)
-  end
-
-  def url_for(path)
-    URI.join(request.base_url, path).to_s
-  end
-
-  def session
-    request.session
-  end
-end
-
-class Mumukit::Login::Form
-
-  #######################
-  ## Visual components ##
-  #######################
-
-  # This object will configure the login button using the given login settings
-  # customizations, if possible
-  #
-  # @param [Mumukit::Login::Controller] controller a Mumukit::Login::Controller
-  # @param [Mumukit::Login::Settings] login_settings customizations for the login UI
-  def initialize(provider, controller, login_settings)
-    @provider = provider
-    @controller = controller
-    @login_settings = login_settings
-  end
-
-  # HTML <HEAD> customizations. Send this message
-  # in order to add login provider-specific code - like CSS and JS -
-  # to your page header.
-  #
-  def header_html
-    @provider.header_html(@controller, @login_settings)&.html_safe
-  end
-
-  def button_html(title, clazz)
-    @provider.button_html(@controller, title, clazz)&.html_safe
-  end
-
-  def footer_html
-    @provider.footer_html(@controller)&.html_safe
-  end
-
-  ###############################
-  ## Triggering Authentication ##
-  ###############################
-
-  # Ask the user for authentication, by either rendering
-  # the login form or redirecting to it
-  #
-  # This method should be called from a controller action
-  # or action filter.
-  #
-  def show!
-    @controller.redirect! @provider.login_path(@controller)
-  end
-end
-
-module Mumukit::Login::Framework
-end
-
-module Mumukit::Login::Framework::Rails
-
-  def self.env(rails_controller)
-    rails_controller.request.env
-  end
-
-  def self.redirect!(path, rails_controller)
-    rails_controller.redirect_to path
-  end
-
-  def self.render_html!(content, rails_controller)
-    rails_controller.render html: content.html_safe, layout: true
-  end
-
-  # Configures the login routes.
-  # This method should be used this way:
-  #
-  #  controller :sessions do
-  #    Mumukit::Login.configure_session_controller_routes! self
-  #  end
-  #
-  # @param [RailsRouter] rails_router
-  #
-  def self.configure_login_routes!(rails_router)
-    rails_router.controller :login do
-      rails_router.match 'auth/:provider/callback' => :callback, via: [:get, :post], as: 'auth_callback'
-      rails_router.get 'auth/failure' => :failure
-      rails_router.get 'logout' => :destroy
-      rails_router.get 'login' => :login
-    end
-  end
-
-  def self.configure_login_controller!(controller_class)
-    controller_class.class_eval do
-      include Mumukit::Login::LoginControllerHelpers
-    end
-  end
-
-  # Configures forgery protection and mixes authentication methods.
-  #
-  # @param [ActionController::Base::Class] controller_class
-  #
-  def self.configure_controller!(controller_class)
-    Mumukit::Login.config.provider.configure_rails_forgery_protection!(controller_class)
-    controller_class.class_eval do
-      include Mumukit::Login::AuthenticationHelpers
-
-      helper_method :current_user,
-                    :current_user?,
-                    :current_user_uid,
-                    :mumukit_controller,
-                    :login_form
-
-    end
-  end
-end
 
 module Mumukit::Login
 
@@ -278,47 +64,6 @@ module Mumukit::Login
 
   def self.provider
     Mumukit::Login.config.provider
-  end
-end
-
-module Mumukit::Login::Provider
-  def self.from_env
-    parse_login_provider(login_provider_string).tap do |provider|
-      puts "[Mumukit::Login] Using #{provider} as login provider"
-    end
-  end
-
-  def self.login_provider_string
-    if ENV['MUMUKI_LOGIN_PROVIDER'].blank? || ENV['RACK_ENV'] == 'test' || ENV['RAILS_ENV'] == 'test'
-      'developer'
-    else
-      ENV['MUMUKI_LOGIN_PROVIDER']
-    end
-  end
-
-  def self.parse_login_provider(login_provider)
-    case login_provider
-      when 'developer'
-        Mumukit::Login::Provider::Developer.new
-      when 'saml'
-        Mumukit::Login::Provider::Saml.new
-      when 'auth0'
-        Mumukit::Login::Provider::Auth0.new
-      else
-        raise "Unknown login_provider `#{login_provider}`"
-    end
-  end
-end
-
-module Mumukit::Login::Profile
-
-  def self.from_omniauth(omniauth)
-    struct provider: omniauth.provider,
-           name: omniauth.info.nickname || omniauth.info.name,
-           social_id: omniauth.uid,
-           email: omniauth.info.email,
-           uid: omniauth.info.email || omniauth.uid,
-           image_url: omniauth.info.image
   end
 end
 
@@ -536,10 +281,11 @@ module Mumukit::Login::AuthenticationHelpers
   end
 end
 
-Mumukit::Login.configure do |config|
-  # User class must understand
-  #     find_by_uid!
-  #     for_profile
-  config.user_class = User
-  config.framework = Mumukit::Login::Framework::Rails
-end
+require_relative './login/controller'
+require_relative './login/form'
+require_relative './login/framework'
+require_relative './login/origin_redirector'
+require_relative './login/profile'
+require_relative './login/provider'
+require_relative './login/settings'
+require_relative './login/version'
