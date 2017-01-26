@@ -1,5 +1,10 @@
 require 'rack/request'
 require 'addressable/uri'
+
+require 'omniauth'
+require 'omniauth-auth0'
+require 'omniauth-saml'
+
 require 'mumukit/core'
 
 require_relative './login/version'
