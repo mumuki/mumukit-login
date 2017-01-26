@@ -1,6 +1,7 @@
-require_relative './login/version'
-
 require 'addressable/uri'
+require 'mumukit/core'
+
+require_relative './login/version'
 
 module Mumukit::Login
   def self.configure
@@ -27,7 +28,6 @@ module Mumukit::Login
     @config
   end
 end
-
 
 module Mumukit::Login
 
@@ -64,141 +64,6 @@ module Mumukit::Login
 
   def self.provider
     Mumukit::Login.config.provider
-  end
-end
-
-class Mumukit::Login::Provider::Base
-  def name
-    @name ||= self.class.name.demodulize.downcase
-  end
-
-  required :configure_omniauth!
-
-  def request_authentication!(controller, _login_settings)
-    controller.redirect! auth_path
-  end
-
-  def configure_rails_forgery_protection!(action_controller)
-    action_controller.protect_from_forgery with: :exception
-  end
-
-  def login_path(controller)
-    "/login?origin=#{controller.request.path}"
-  end
-
-  def auth_path
-    "/auth/#{name}"
-  end
-
-  def callback_path
-    "/auth/#{name}/callback"
-  end
-
-  def logout_redirection_path
-    '/'
-  end
-
-  def button_html(controller, title, clazz)
-    %Q{<a class="#{clazz}" href="#{login_path(controller)}">#{title}</a>}
-  end
-
-  def footer_html(*)
-    nil
-  end
-
-  def header_html(*)
-    nil
-  end
-end
-
-class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
-  def saml_config
-    Mumukit::Login.config.saml
-  end
-
-  def configure_omniauth!(omniauth)
-    omniauth.provider :saml,
-                      # TODO: change the :assertion_consumer_service_url, the :issuer and the :slo_default_relay_state:
-                      # =>  1. we can not call any Organization method since there is none instantiated yet and
-                      # =>  2. we must use the absolut path to generate the right SAML metadata to set up the federation with the IdP
-                      assertion_consumer_service_url: "#{saml_config.base_url}#{callback_path}",
-                      single_logout_service_url: "#{saml_config.base_url}#{auth_path}/slo",
-                      issuer: "#{saml_config.base_url}#{auth_path}",
-                      idp_sso_target_url: saml_config.idp_sso_target_url,
-                      idp_slo_target_url: saml_config.idp_slo_target_url,
-                      slo_default_relay_state: saml_config.base_url,
-                      idp_cert: File.read('./saml.crt'),
-                      attribute_service_name: 'Mumuki',
-                      request_attributes: [
-                          {name: 'email', name_format: 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', friendly_name: 'Email address'},
-                          {name: 'name', name_format: 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', friendly_name: 'Full name'},
-                          {name: 'image', name_format: 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', friendly_name: 'Avatar image'}
-                      ],
-                      attribute_statements: {
-                          name: [saml_config.translaton_name],
-                          email: [saml_config.translaton_email],
-                          image: [saml_config.translaton_image]
-                      }
-  end
-
-  def configure_rails_forgery_protection!(_controller_class)
-    # FIXME this is big security issue
-    # Do nothing (do not protect): the IdP calls the assertion_url via POST and without the CSRF token
-  end
-
-  def logout_redirection_path
-    "#{auth_path}/spslo"
-  end
-end
-
-class Mumukit::Login::Provider::Auth0 < Mumukit::Login::Provider::Base
-  def configure_omniauth!(omniauth)
-    omniauth.provider :auth0,
-                      auth0_config.client_id,
-                      auth0_config.client_secret,
-                      auth0_config.domain,
-                      callback_path: callback_path
-  end
-
-  def request_authentication!(controller, login_settings)
-    settings = lock_settings(controller, login_settings, {closable: false})
-    controller.render_html! <<HTML
- <script type="text/javascript">
-      new Auth0Lock('#{auth0_config.client_id}', '#{auth0_config.domain}').show(#{settings});
-  </script>
-HTML
-  end
-
-  def header_html(*)
-    <<HTML
-<script src="https://cdn.auth0.com/js/lock-7.12.min.js"></script>
-</script>
-HTML
-  end
-
-  def footer_html(*)
-    '<a href="https://auth0.com/" target="_blank">
-        <img height="40" alt="JWT Auth for open source projects" src="//cdn.auth0.com/oss/badges/a0-badge-light.png"/>
-     </a>'
-  end
-
-  private
-
-  def auth0_config
-    Mumukit::Login.config.auth0
-  end
-
-  def lock_settings(controller, login_settings, options)
-    login_settings.to_lock_json(controller.url_for(callback_path), options)
-  end
-end
-
-class Mumukit::Login::Provider::Developer < Mumukit::Login::Provider::Base
-  def configure_omniauth!(omniauth)
-    omniauth.provider :developer
-  end
-
-  def configure_rails_forgery_protection!(*)
   end
 end
 

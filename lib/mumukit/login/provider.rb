@@ -26,3 +26,8 @@ module Mumukit::Login::Provider
     end
   end
 end
+
+require_relative './provider/base'
+require_relative './provider/saml'
+require_relative './provider/auth0'
+require_relative './provider/developer'
