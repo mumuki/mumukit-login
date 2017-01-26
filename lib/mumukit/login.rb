@@ -1,3 +1,4 @@
+require 'rack/request'
 require 'addressable/uri'
 require 'mumukit/core'
 

@@ -20,7 +20,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3'
+  spec.add_development_dependency 'codeclimate-test-reporter'
+  spec.add_development_dependency 'simplecov'
 
+  spec.add_dependency 'rack', '>= 1.5'
   spec.add_dependency 'addressable'
   spec.add_dependency 'omniauth', '~> 1.2'
   spec.add_dependency 'omniauth-auth0', '~> 1.1'
