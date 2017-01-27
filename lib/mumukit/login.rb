@@ -7,8 +7,6 @@ require 'omniauth-saml'
 
 require 'mumukit/core'
 
-require_relative './login/version'
-
 module Mumukit::Login
   def self.configure
     @config ||= defaults
@@ -34,6 +32,17 @@ module Mumukit::Login
     @config
   end
 end
+
+require_relative './login/controller'
+require_relative './login/form'
+require_relative './login/framework'
+require_relative './login/origin_redirector'
+require_relative './login/profile'
+require_relative './login/provider'
+require_relative './login/settings'
+require_relative './login/helpers'
+require_relative './login/version'
+
 
 module Mumukit::Login
 
@@ -72,91 +81,3 @@ module Mumukit::Login
     Mumukit::Login.config.provider
   end
 end
-
-module Mumukit::Login::LoginControllerHelpers
-
-  def login
-    origin_redirector.save_location!
-    login_provider.request_authentication! mumukit_controller, login_settings
-  end
-
-  def callback
-    profile = Mumukit::Login::Profile.from_omniauth(env['omniauth.auth'])
-    user = Mumukit::Login.config.user_class.for_profile profile
-    save_session_user_uid! user
-    origin_redirector.redirect!
-  end
-
-  def destroy
-    destroy_session_user_uid!
-    mumukit_controller.redirect! login_provider.logout_redirection_path
-  end
-
-  private
-
-  # default
-  def destroy_session_user_uid!
-    mumukit_controller.session[:user_uid] = nil
-  end
-
-  # default
-  def save_session_user_uid!(user)
-    mumukit_controller.session[:user_uid] = user.uid
-  end
-end
-
-module Mumukit::Login::AuthenticationHelpers
-
-  def authenticate!
-    login_form.show! unless current_user?
-  end
-
-  def current_user?
-    current_user_uid.present?
-  end
-
-  def current_user
-    @current_user ||= Mumukit::Login.config.user_class.find_by_uid!(current_user_uid) if current_user?
-  end
-
-  private
-
-  # default
-  def current_user_uid
-    mumukit_controller.session[:user_uid]
-  end
-
-  # default
-  def login_settings
-    Mumukit::Login::Settings.new
-  end
-
-  def mumukit_controller
-    @mumukit_controller ||= Mumukit::Login::Controller.new login_framework, self
-  end
-
-  def login_form
-    @login_builder ||= Mumukit::Login::Form.new login_provider, mumukit_controller, login_settings
-  end
-
-  def origin_redirector
-    @after_login_redirector ||= Mumukit::Login::OriginRedirector.new mumukit_controller
-  end
-
-  def login_framework
-    Mumukit::Login.config.framework
-  end
-
-  def login_provider
-    Mumukit::Login.config.provider
-  end
-end
-
-require_relative './login/controller'
-require_relative './login/form'
-require_relative './login/framework'
-require_relative './login/origin_redirector'
-require_relative './login/profile'
-require_relative './login/provider'
-require_relative './login/settings'
-require_relative './login/version'
