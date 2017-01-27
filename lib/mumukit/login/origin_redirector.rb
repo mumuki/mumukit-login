@@ -4,7 +4,9 @@ class Mumukit::Login::OriginRedirector
   end
 
   def redirect!
-    @controller.redirect!(@controller.session[:redirect_after_login] || '/')
+    location = @controller.session[:redirect_after_login]
+    @controller.session[:redirect_after_login] = nil
+    @controller.redirect!(location || '/')
   end
 
   def save_location!
