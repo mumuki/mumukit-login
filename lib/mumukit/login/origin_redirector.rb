@@ -16,6 +16,6 @@ class Mumukit::Login::OriginRedirector
   private
 
   def origin
-    @controller.request.params['origin']
+    @controller.request.params['origin'] || '/'
   end
 end
