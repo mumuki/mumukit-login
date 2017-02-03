@@ -13,7 +13,7 @@ module Mumukit::Login::Framework::Sinatra
   end
 
   def self.configure_login_routes!(sinatra_module)
-    sinatra_module.class_eval do
+    sinatra_module.instance_eval do
       auth_callback = proc { callback_current_user! }
       get '/auth/:provider/callback', &auth_callback
       post '/auth/:provider/callback', &auth_callback
@@ -25,13 +25,13 @@ module Mumukit::Login::Framework::Sinatra
 
 
   def self.configure_login_controller!(sinatra_helpers)
-    sinatra_helpers.class_eval do
+    sinatra_helpers.instance_eval do
       include Mumukit::Login::LoginControllerHelpers
     end
   end
 
   def self.configure_controller!(sinatra_helpers)
-    sinatra_helpers.class_eval do
+    sinatra_helpers.instance_eval do
       include Mumukit::Login::AuthenticationHelpers
       include Mumukit::Login::AuthorizationHelpers
     end

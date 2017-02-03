@@ -16,7 +16,7 @@ module Mumukit::Login::AuthenticationHelpers
 
   # default
   def current_user_uid
-    mumukit_controller.session[:user_uid]
+    mumukit_controller.current_user_store.get_uid
   end
 
   # default

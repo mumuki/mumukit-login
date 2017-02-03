@@ -21,11 +21,13 @@ module Mumukit::Login::LoginControllerHelpers
 
   # default
   def destroy_current_user_session!
-    mumukit_controller.session[:user_uid] = nil
+    mumukit_controller.current_user_store.clear!
   end
 
   # default
   def save_current_user_session!(user)
-    mumukit_controller.session[:user_uid] = user.uid
+    mumukit_controller.current_user_store.set! user.uid,
+                                               user_name: user.name,
+                                               user_image_url: user.image_url
   end
 end
