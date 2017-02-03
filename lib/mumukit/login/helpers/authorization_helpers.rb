@@ -1,6 +1,10 @@
 module Mumukit::Login::AuthorizationHelpers
   def authorize!(role)
-    current_user.protect! role, authorization_slug
+    if current_user?
+      current_user.protect! role, authorization_slug
+    else
+      authenticate!
+    end
   end
 
   def has_permission?(role)
