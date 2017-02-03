@@ -13,7 +13,7 @@ class Mumukit::Login::SessionCurrentUserStore
 
   def set!(uid, values)
     @controller.session[:user_uid] = uid
-    values.each { |k, v| session[k] = v }
+    values.each { |k, v| @controller.session[k] = v }
   end
 end
 
