@@ -2,7 +2,11 @@ module Mumukit::Login::LoginControllerHelpers
 
   def login_current_user!
     origin_redirector.save_location!
-    login_provider.request_authentication! mumukit_controller, login_settings
+    if current_user?
+      origin_redirector.redirect!
+    else
+      login_provider.request_authentication! mumukit_controller, login_settings
+    end
   end
 
   def callback_current_user!
