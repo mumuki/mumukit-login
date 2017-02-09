@@ -35,4 +35,8 @@ class Mumukit::Login::Controller
   def session
     request.session
   end
+
+  def cookies
+    @framework.cookies @native
+  end
 end

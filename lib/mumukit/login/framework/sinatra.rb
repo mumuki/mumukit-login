@@ -4,6 +4,10 @@ module Mumukit::Login::Framework::Sinatra
     sinatra_handler.request.env
   end
 
+  def self.cookies(sinatra_handler)
+    sinatra_handler.cookies
+  end
+
   def self.redirect!(path, sinatra_handler)
     sinatra_handler.redirect path
   end

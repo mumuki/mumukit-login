@@ -4,6 +4,8 @@ class Mumukit::Login::SessionCurrentUserStore
   end
 
   def get_uid
+    puts "COOKIES: #{@controller.session.as_json}"
+    puts "UID: #{@controller.session[:user_uid]}"
     @controller.session[:user_uid]
   end
 
@@ -13,7 +15,7 @@ class Mumukit::Login::SessionCurrentUserStore
 
   def set!(uid, values)
     @controller.session[:user_uid] = uid
-    values.each { |k, v| @controller.session[k] = v }
+    @controller.cookies[:mucookie] = values.to_json
   end
 end
 
