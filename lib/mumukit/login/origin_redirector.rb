@@ -10,7 +10,7 @@ class Mumukit::Login::OriginRedirector
   end
 
   def save_location!
-    @controller.session[:redirect_after_login] = Addressable::URI.heuristic_parse(origin).path
+    @controller.session[:redirect_after_login] = Addressable::URI.heuristic_parse(origin)
   end
 
   private
