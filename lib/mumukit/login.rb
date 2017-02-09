@@ -34,6 +34,7 @@ module Mumukit::Login
 end
 
 require_relative './login/controller'
+require_relative './login/current_user_store'
 require_relative './login/form'
 require_relative './login/framework'
 require_relative './login/origin_redirector'

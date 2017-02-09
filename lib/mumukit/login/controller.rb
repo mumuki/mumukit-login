@@ -4,6 +4,14 @@ class Mumukit::Login::Controller
     @native = native
   end
 
+  def current_user_store
+    if env['HTTP_AUTHORIZATION']
+      Mumukit::Login::JWTCurrentUserStore.new self
+    else
+      Mumukit::Login::SessionCurrentUserStore.new self
+    end
+  end
+
   def env
     @framework.env @native
   end
@@ -16,12 +24,12 @@ class Mumukit::Login::Controller
     @framework.render_html!(html, @native)
   end
 
-  def request
-    Rack::Request.new(env)
-  end
-
   def url_for(path)
     URI.join(request.base_url, path).to_s
+  end
+
+  def request
+    Rack::Request.new(env)
   end
 
   def session

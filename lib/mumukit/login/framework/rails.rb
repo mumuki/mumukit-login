@@ -23,16 +23,22 @@ module Mumukit::Login::Framework::Rails
   #
   def self.configure_login_routes!(rails_router)
     rails_router.controller :login do
-      rails_router.match 'auth/:provider/callback' => :callback, via: [:get, :post], as: 'auth_callback'
-      rails_router.get 'auth/failure' => :failure
-      rails_router.get 'logout' => :destroy
-      rails_router.get 'login' => :login
+      rails_router.match 'auth/:provider/callback' => :callback_current_user, via: [:get, :post]
+      rails_router.get 'auth/failure' => :login_failure
+      rails_router.get 'logout' => :logout_current_user
+      rails_router.get 'login' => :login_current_user
     end
   end
 
   def self.configure_login_controller!(controller_class)
     controller_class.class_eval do
       include Mumukit::Login::LoginControllerHelpers
+
+      %w(callback_current_user login_failure logout_current_user login_current_user).each do |method|
+        define_method method do
+          self.send "#{method}!"
+        end
+      end
     end
   end
 
@@ -44,6 +50,7 @@ module Mumukit::Login::Framework::Rails
     Mumukit::Login.config.provider.configure_rails_forgery_protection!(controller_class)
     controller_class.class_eval do
       include Mumukit::Login::AuthenticationHelpers
+      include Mumukit::Login::AuthorizationHelpers
 
       helper_method :current_user,
                     :current_user?,
