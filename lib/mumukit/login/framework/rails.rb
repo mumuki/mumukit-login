@@ -1,7 +1,24 @@
 module Mumukit::Login::Framework::Rails
-
   def self.env(rails_controller)
     rails_controller.request.env
+  end
+
+  def self.write_cookie!(key, value, rails_controller)
+    rails_controller.instance_eval do
+      cookies[key] = value
+    end
+  end
+
+  def self.delete_cookie!(key, domain, rails_controller)
+    rails_controller.instance_eval do
+      cookies.delete key, domain: domain
+    end
+  end
+
+  def self.read_cookie(key, rails_controller)
+    rails_controller.instance_eval do
+      cookies[key]
+    end
   end
 
   def self.redirect!(path, rails_controller)

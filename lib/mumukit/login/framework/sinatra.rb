@@ -1,11 +1,18 @@
 module Mumukit::Login::Framework::Sinatra
-
   def self.env(sinatra_handler)
     sinatra_handler.request.env
   end
 
-  def self.cookies(sinatra_handler)
-    sinatra_handler.cookies
+  def self.write_cookie!(key, value, sinatra_handler)
+    sinatra_handler.response.set_cookie key, value
+  end
+
+  def self.delete_cookie!(key, domain, sinatra_handler)
+    sinatra_handler.request.cookies.delete_cookie key, domain: domain
+  end
+
+  def self.read_cookie(key, sinatra_handler)
+    sinatra_handler.request.cookies[key]
   end
 
   def self.redirect!(path, sinatra_handler)

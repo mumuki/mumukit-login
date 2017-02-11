@@ -6,6 +6,7 @@ require 'omniauth-auth0'
 require 'omniauth-saml'
 
 require 'mumukit/core'
+require 'mumukit/auth'
 
 module Mumukit::Login
   def self.configure
@@ -15,6 +16,11 @@ module Mumukit::Login
 
   def self.defaults
     struct.tap do |config|
+      config.mucookie_domain = ENV['MUMUKI_COOKIES_DOMAIN'] || ENV['MUMUKI_MUCOOKIE_DOMAIN']
+      config.mucookie_secret_key = ENV['SECRET_KEY_BASE'] || ENV['MUMUKI_MUCOOKIE_SECRET_KEY']
+      config.mucookie_secret_salt = ENV['MUMUKI_MUCOOKIE_SECRET_SALT'] || 'mucookie secret salt'
+      config.mucookie_sign_salt = ENV['MUMUKI_MUCOOKIE_SIGN_KEY'] || 'mucookie sign salt'
+
       config.provider = Mumukit::Login::Provider.from_env
       config.saml = struct base_url: ENV['MUMUKI_SAML_BASE_URL'],
                            idp_sso_target_url: ENV['MUMUKI_SAML_IDP_SSO_TARGET_URL'],
@@ -34,9 +40,10 @@ module Mumukit::Login
 end
 
 require_relative './login/controller'
-require_relative './login/current_user_store'
+require_relative './login/shared_session'
 require_relative './login/form'
 require_relative './login/framework'
+require_relative './login/mucookie'
 require_relative './login/origin_redirector'
 require_relative './login/profile'
 require_relative './login/provider'
@@ -81,4 +88,9 @@ module Mumukit::Login
   def self.provider
     Mumukit::Login.config.provider
   end
+end
+
+Mumukit::Auth.configure do |config|
+  config.clients.mucookie = {id: ENV['MUMUKI_MUCOOKIE_CLIENT_ID'],
+                             secret: ENV['MUMUKI_MUCOOKIE_SECRET']}
 end
