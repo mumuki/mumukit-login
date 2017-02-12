@@ -8,7 +8,7 @@ module Mumukit::Login::Framework::Sinatra
   end
 
   def self.delete_cookie!(key, domain, sinatra_handler)
-    sinatra_handler.request.cookies.delete_cookie key, domain: domain
+    sinatra_handler.response.delete_cookie key, domain: domain
   end
 
   def self.read_cookie(key, sinatra_handler)
