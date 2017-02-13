@@ -3,7 +3,7 @@ module Mumukit::Login::LoginControllerHelpers
   def login_current_user!
     origin_redirector.save_location!
     if current_user?
-      origin_redirector.redirect!
+      origin_redirector.redirect_after_login!
     else
       login_provider.request_authentication! mumukit_controller, login_settings
     end
@@ -13,12 +13,12 @@ module Mumukit::Login::LoginControllerHelpers
     profile = Mumukit::Login::Profile.from_omniauth(mumukit_controller.env['omniauth.auth'])
     user = Mumukit::Login.config.user_class.for_profile profile
     save_current_user_session! user
-    origin_redirector.redirect!
+    origin_redirector.redirect_after_login!
   end
 
   def logout_current_user!
     destroy_current_user_session!
-    mumukit_controller.redirect! login_provider.logout_redirection_path
+    origin_redirector.redirect_after_logout!
   end
 
   private
