@@ -4,12 +4,28 @@ class Mumukit::Login::Controller
     @native = native
   end
 
-  def current_user_store
+  def shared_session
     if env['HTTP_AUTHORIZATION']
-      Mumukit::Login::JWTCurrentUserStore.new self
+      Mumukit::Login::TokenSharedSession.new env
     else
-      Mumukit::Login::SessionCurrentUserStore.new self
+      Mumukit::Login::MucookieSharedSession.new mucookie
     end
+  end
+
+  def mucookie
+    @mucookie ||= Mumukit::Login::Mucookie.new self
+  end
+
+  def url_for(path)
+    URI.join(request.base_url, path).to_s
+  end
+
+  def request
+    Rack::Request.new(env)
+  end
+
+  def session
+    request.session
   end
 
   def env
@@ -24,15 +40,15 @@ class Mumukit::Login::Controller
     @framework.render_html!(html, @native)
   end
 
-  def url_for(path)
-    URI.join(request.base_url, path).to_s
+  def write_cookie!(key, value)
+    @framework.write_cookie! key, value, @native
   end
 
-  def request
-    Rack::Request.new(env)
+  def read_cookie(key)
+    @framework.read_cookie key, @native
   end
 
-  def session
-    request.session
+  def delete_cookie!(key, domain)
+    @framework.delete_cookie! key, domain, @native
   end
 end
