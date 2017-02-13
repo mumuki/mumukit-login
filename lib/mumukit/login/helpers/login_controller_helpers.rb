@@ -1,7 +1,7 @@
 module Mumukit::Login::LoginControllerHelpers
 
   def login_current_user!
-    origin_redirector.save_location!
+    origin_redirector.save_after_login_location!
     if current_user?
       origin_redirector.redirect_after_login!
     else

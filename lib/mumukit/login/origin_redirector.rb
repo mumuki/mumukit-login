@@ -13,7 +13,7 @@ class Mumukit::Login::OriginRedirector
     @controller.redirect! origin
   end
 
-  def save_location!
+  def save_after_login_location!
     @controller.session[:redirect_after_login] = origin
   end
 

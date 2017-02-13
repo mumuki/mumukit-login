@@ -10,7 +10,7 @@ describe Mumukit::Login::OriginRedirector do
     before { expect(controller).to receive(:redirect!).with('/foo') }
 
     before { allow(controller).to receive(:request).and_return(struct params: {'origin' => '/foo'}) }
-    before { redirector.save_location! }
+    before { redirector.save_after_login_location! }
     before { redirector.redirect_after_login! }
 
     it { expect(session[:redirect_after_login]).to be nil }
@@ -20,7 +20,7 @@ describe Mumukit::Login::OriginRedirector do
     before { expect(controller).to receive(:redirect!).with('http://baz.com/foo') }
 
     before { allow(controller).to receive(:request).and_return(struct params: {'origin' => 'http://baz.com/foo'}) }
-    before { redirector.save_location! }
+    before { redirector.save_after_login_location! }
     before { redirector.redirect_after_login! }
 
     it { expect(session[:redirect_after_login]).to be nil }
