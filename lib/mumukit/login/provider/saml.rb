@@ -16,7 +16,7 @@ class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
                       slo_default_relay_state: saml_config.base_url,
                       idp_cert: File.read('./saml_idp.crt'),
                       certificate: File.read('./saml.crt'),
-                      private_key: File.read('./saml.pem'),
+                      private_key: File.read('./saml.key'),
                       attribute_service_name: 'Mumuki',
                       request_attributes: [
                           {name: 'email', name_format: 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', friendly_name: 'Email address'},
