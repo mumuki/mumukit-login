@@ -23,9 +23,9 @@ class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
                           {name: 'image', name_format: 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', friendly_name: 'Avatar image'}
                       ],
                       attribute_statements: {
-                          name: [saml_config.translaton_name],
-                          email: [saml_config.translaton_email],
-                          image: [saml_config.translaton_image]
+                          name: [saml_config.translation_name],
+                          email: [saml_config.translation_email],
+                          image: [saml_config.translation_image]
                       }
   end
 
