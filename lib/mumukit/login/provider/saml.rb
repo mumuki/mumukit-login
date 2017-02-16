@@ -14,7 +14,8 @@ class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
                       idp_sso_target_url: saml_config.idp_sso_target_url,
                       idp_slo_target_url: saml_config.idp_slo_target_url,
                       slo_default_relay_state: saml_config.base_url,
-                      idp_cert: File.read('./saml.crt'),
+                      idp_cert: File.read('./saml_idp.crt'),
+                      certificate: File.read('./saml.crt'),
                       private_key: File.read('./saml.pem'),
                       attribute_service_name: 'Mumuki',
                       request_attributes: [
