@@ -22,9 +22,9 @@ describe Mumukit::Login::Provider do
     before { allow(controller).to receive(:url_for).with('/auth/auth0/callback').and_return('http://localmumuki.io/auth/auth0/callback') }
 
     it { expect(provider.button_html(controller, 'login', 'clazz')).to eq '<a class="clazz" href="/login?origin=/foo">login</a>' }
-    it { expect(provider.header_html(controller, login_settings)).to be_present }
-    it { expect(provider.header_html(controller, login_settings)).to include 'https://cdn.auth0.com/js/lock-7.12.min.js' }
-    it { expect(provider.header_html(controller, login_settings)).to_not include 'http://localmumuki.io/auth/auth0/callback' }
+    it { expect(provider.send(:auth0_script_html, controller, login_settings)).to be_present }
+    it { expect(provider.send(:auth0_script_html, controller, login_settings)).to include 'https://cdn.auth0.com/js/lock-7.12.min.js' }
+    it { expect(provider.send(:auth0_script_html, controller, login_settings)).to include 'http://localmumuki.io/auth/auth0/callback' }
 
     it { expect(provider.footer_html(controller)).to be_present }
     it { expect(provider.footer_html(controller)).to include '//cdn.auth0.com/oss/badges/a0-badge-light.png' }
