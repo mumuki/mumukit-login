@@ -8,13 +8,7 @@ class Mumukit::Login::Provider::Auth0 < Mumukit::Login::Provider::Base
   end
 
   def request_authentication!(controller, login_settings)
-    settings = lock_settings(controller, login_settings, {closable: false})
-    controller.render_html! <<HTML
- <script src="https://cdn.auth0.com/js/lock-7.12.min.js"></script>
- <script type="text/javascript">
-      new Auth0Lock('#{auth0_config.client_id}', '#{auth0_config.domain}').show(#{settings});
-  </script>
-HTML
+    controller.render_html! auth0_script_html(controller, login_settings)
   end
 
   def header_html(*)
@@ -35,5 +29,15 @@ HTML
 
   def lock_settings(controller, login_settings, options)
     login_settings.to_lock_json(controller.url_for(callback_path), options)
+  end
+
+  def auth0_script_html(controller, login_settings)
+    settings = lock_settings(controller, login_settings, {closable: false})
+    <<HTML
+ <script src="https://cdn.auth0.com/js/lock-7.12.min.js"></script>
+ <script type="text/javascript">
+      new Auth0Lock('#{auth0_config.client_id}', '#{auth0_config.domain}').show(#{settings});
+  </script>
+HTML
   end
 end
