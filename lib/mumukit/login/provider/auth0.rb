@@ -34,7 +34,7 @@ class Mumukit::Login::Provider::Auth0 < Mumukit::Login::Provider::Base
   def auth0_script_html(controller, login_settings)
     settings = lock_settings(controller, login_settings, {closable: false})
     <<HTML
- <script src="https://cdn.auth0.com/js/lock-9.min.js"></script>
+ <script src="http://cdn.auth0.com/js/lock/10.14.0/lock.min.js"></script>
  <script type="text/javascript">
       new Auth0Lock('#{auth0_config.client_id}', '#{auth0_config.domain}').show(#{settings});
   </script>
