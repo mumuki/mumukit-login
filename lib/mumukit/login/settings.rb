@@ -1,4 +1,3 @@
-
 class Mumukit::Login::Settings
   LOCK_LOGIN_METHODS = {
       facebook: 'facebook',
@@ -35,11 +34,19 @@ class Mumukit::Login::Settings
   end
 
   def lock_json
-    {dict: I18n.locale,
-     connections: lock_login_methods,
-     icon: '/logo-alt.png',
-     socialBigButtons: !many_methods?,
-     disableResetAction: false}
+    {
+        languageDictionary: {
+            title: 'Mumuki'
+        },
+        language: I18n.locale,
+        allowedConnections: lock_login_methods,
+        socialButtonStyle: many_methods? ? 'small' : 'big',
+        rememberLastLogin: true,
+        theme: {
+            logo: '/logo-alt.png',
+            primaryColor: '#FF5B81'
+        },
+        disableResetAction: false}
   end
 
   def lock_login_methods
