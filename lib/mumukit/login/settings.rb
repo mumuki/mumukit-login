@@ -27,7 +27,7 @@ class Mumukit::Login::Settings
 
   def to_lock_json(callback_url, options={})
     lock_json
-        .merge(callbackURL: callback_url, responseType: 'code', authParams: {scope: 'openid profile'})
+        .merge(auth: {redirect: true, redirectUrl: callback_url}, responseType: 'code', authParams: {scope: 'openid profile'})
         .merge(options)
         .to_json
         .html_safe
