@@ -46,7 +46,8 @@ class Mumukit::Login::Settings
             logo: '/logo-alt.png',
             primaryColor: '#FF5B81'
         },
-        disableResetAction: false}
+        disableResetAction: false,
+        closable: false}
   end
 
   def lock_login_methods
