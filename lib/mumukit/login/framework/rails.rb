@@ -25,7 +25,7 @@ module Mumukit::Login::Framework::Rails
     rails_controller.redirect_to path
   end
 
-  def self.render_html!(content, rails_controller)
+  def self.render_html!(header, content, rails_controller)
     rails_controller.render html: content.html_safe, layout: true
   end
 

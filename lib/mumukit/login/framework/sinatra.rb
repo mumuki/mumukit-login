@@ -19,8 +19,8 @@ module Mumukit::Login::Framework::Sinatra
     sinatra_handler.redirect path
   end
 
-  def self.render_html!(content, sinatra_handler)
-    content
+  def self.render_html!(header, content, sinatra_handler)
+    "#{header}\n#{content}"
   end
 
   def self.configure_login_routes!(sinatra_module)
