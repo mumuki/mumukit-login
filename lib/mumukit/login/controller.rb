@@ -36,8 +36,8 @@ class Mumukit::Login::Controller
     @framework.redirect!(path, @native)
   end
 
-  def render_html!(html)
-    @framework.render_html!(html, @native)
+  def render_html!(header_html, script_html)
+    @framework.render_html!(header_html, script_html, @native)
   end
 
   def write_cookie!(key, value)
