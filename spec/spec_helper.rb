@@ -22,3 +22,11 @@ Mumukit::Login.configure do |config|
   config.mucookie_secret_salt = 'mucookie test secret salt'
   config.mucookie_sign_salt = 'mucookie test sign salt'
 end
+
+
+def dummy_rack_request
+  struct env: {
+      'HTTP_HOST' => 'localmumuki.io',
+      'rack.url_scheme' => 'http',
+      'SERVER_PORT' => '80'}
+end
