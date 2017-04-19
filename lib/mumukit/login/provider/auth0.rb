@@ -9,7 +9,8 @@ class Mumukit::Login::Provider::Auth0 < Mumukit::Login::Provider::Base
 
   def request_authentication!(controller, login_settings)
     settings = lock_settings(controller, login_settings, {closable: false})
-    controller.render_html! header_html, script_html(settings)
+    controller.render_html! header: header_html,
+                            body: script_html(settings)
   end
 
   def header_html(*)

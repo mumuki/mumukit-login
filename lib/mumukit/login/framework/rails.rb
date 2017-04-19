@@ -25,8 +25,8 @@ module Mumukit::Login::Framework::Rails
     rails_controller.redirect_to path
   end
 
-  def self.render_html!(header, content, rails_controller)
-    rails_controller.render html: content.html_safe, layout: true
+  def self.render_html!(html, rails_controller)
+    rails_controller.render html: html[:body].html_safe, layout: true
   end
 
   # Configures the login routes.
