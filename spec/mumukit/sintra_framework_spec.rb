@@ -1,9 +1,9 @@
 require_relative '../spec_helper'
 
-describe Mumukit::Login::Framework::Sinatra do
+describe Mumukit::Platform::WebFramework::Sinatra do
   let(:native) { double(:native) }
   let(:settings) { Mumukit::Login::Settings.new }
-  let(:controller) { Mumukit::Login::Controller.new Mumukit::Login::Framework::Sinatra, native }
+  let(:controller) { Mumukit::Login::Controller.new Mumukit::Platform::WebFramework::Sinatra, native }
 
   describe 'sinatra + auth0' do
     before { allow(native).to receive(:request).and_return dummy_rack_request }

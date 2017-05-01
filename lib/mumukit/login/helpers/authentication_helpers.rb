@@ -25,7 +25,7 @@ module Mumukit::Login::AuthenticationHelpers
   end
 
   def mumukit_controller
-    @mumukit_controller ||= Mumukit::Login::Controller.new login_framework, self
+    @mumukit_controller ||= Mumukit::Login::Controller.new Mumukit::Platform.web_framework, self
   end
 
   def login_form
@@ -34,10 +34,6 @@ module Mumukit::Login::AuthenticationHelpers
 
   def origin_redirector
     @after_login_redirector ||= Mumukit::Login::OriginRedirector.new mumukit_controller
-  end
-
-  def login_framework
-    Mumukit::Login.config.framework
   end
 
   def login_provider

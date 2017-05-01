@@ -7,6 +7,7 @@ require 'omniauth-saml'
 
 require 'mumukit/core'
 require 'mumukit/auth'
+require 'mumukit/platform'
 
 module Mumukit::Login
   def self.configure
@@ -69,21 +70,21 @@ module Mumukit::Login
   end
 
   def self.configure_login_routes!(native)
-    framework.configure_login_routes! native
+    web_framework.configure_login_routes! native
   end
 
   def self.configure_login_controller!(native)
-    framework.configure_login_controller!(native)
+    web_framework.configure_login_controller!(native)
   end
 
   def self.configure_controller!(native)
-    framework.configure_controller! native
+    web_framework.configure_controller! native
   end
 
   private
 
-  def self.framework
-    Mumukit::Login.config.framework
+  def self.web_framework
+    Mumukit::Platform.web_framework
   end
 
   def self.provider

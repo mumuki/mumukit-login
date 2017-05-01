@@ -1,4 +1,4 @@
-module Mumukit::Login::Framework::Sinatra
+module Mumukit::Platform::WebFramework::Sinatra
   def self.env(sinatra_handler)
     sinatra_handler.request.env
   end

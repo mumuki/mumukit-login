@@ -1,4 +1,4 @@
-module Mumukit::Login::Framework::Rails
+module Mumukit::Platform::WebFramework::Rails
   def self.env(rails_controller)
     rails_controller.request.env
   end
