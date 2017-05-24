@@ -43,7 +43,7 @@ class Mumukit::Login::Settings
         socialButtonStyle: many_methods? ? 'small' : 'big',
         rememberLastLogin: true,
         theme: {
-            logo: '/logo-alt.png',
+            logo: Mumukit::Login.config.logo_url,
             primaryColor: '#FF5B81'
         },
         disableResetAction: false,

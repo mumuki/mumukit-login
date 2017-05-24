@@ -4,6 +4,12 @@ describe Mumukit::Login::Settings do
   let(:defaults) { Mumukit::Login::Settings.default_methods }
   let(:facebook_and_user_pass) { [:facebook, :user_pass] }
 
+  describe '#lock_json' do
+    let(:settings) { Mumukit::Login::Settings.new }
+    it { expect(settings.lock_json[:theme]).to eq logo: "https://mumuki.io/static/logo.png",
+                                                  primaryColor: "#FF5B81" }
+  end
+
   describe '#social_methods' do
     context 'with few methods' do
       let(:settings) { Mumukit::Login::Settings.new(facebook_and_user_pass) }

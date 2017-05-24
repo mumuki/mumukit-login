@@ -16,6 +16,7 @@ module Mumukit::Login
 
   def self.defaults
     struct.tap do |config|
+      config.logo_url = ENV['MUMUKI_LOGO_URL'] || "https://mumuki.io/static/logo.png"
       config.mucookie_domain = ENV['MUMUKI_COOKIES_DOMAIN'] || ENV['MUMUKI_MUCOOKIE_DOMAIN']
       config.mucookie_secret_key = ENV['SECRET_KEY_BASE'] || ENV['MUMUKI_MUCOOKIE_SECRET_KEY']
       config.mucookie_secret_salt = ENV['MUMUKI_MUCOOKIE_SECRET_SALT'] || 'mucookie secret salt'
