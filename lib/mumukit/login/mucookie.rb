@@ -9,6 +9,7 @@ class Mumukit::Login::Mucookie
     @controller.write_cookie! cookie_name(key),
                               value: value.to_s,
                               path: '/',
+                              expires: 14.days.since,
                               domain: Mumukit::Login.config.mucookie_domain,
                               httponly: !!options[:httponly]
   end

@@ -32,7 +32,7 @@ describe Mumukit::Login::MucookieSharedSession do
     it { expect(controller.hash['mucookie_session']).to json_like({path: '/',
                                                                    domain: '.localmumuki.io',
                                                                    httponly: true},
-                                                                  except: :value) }
+                                                                  except: [:value, :expires]) }
   end
 
   describe '#profile=' do
@@ -42,7 +42,7 @@ describe Mumukit::Login::MucookieSharedSession do
     it { expect(controller.hash['mucookie_profile']).to json_like({path: '/',
                                                                    domain: '.localmumuki.io',
                                                                    httponly: false},
-                                                                  except: :value) }
+                                                                  except: [:value, :expires]) }
   end
 
   describe '#clear!' do
