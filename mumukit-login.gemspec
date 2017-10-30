@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'omniauth', '~> 1.2'
   spec.add_dependency 'omniauth-auth0', '~> 1.1'
   spec.add_dependency 'omniauth-saml', '~> 1.6'
-  spec.add_dependency 'mumukit-core', '~> 1.0'
+  spec.add_dependency 'mumukit-core', '~> 1.1'
   spec.add_dependency 'mumukit-auth', '~> 7.0'
   spec.add_dependency 'mumukit-platform', '~> 0.2'
 end
