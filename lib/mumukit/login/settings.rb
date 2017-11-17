@@ -36,8 +36,10 @@ class Mumukit::Login::Settings
   def lock_json
     {
         languageDictionary: {
-            title: 'Mumuki'
+            title: 'Mumuki',
+            signUpTerms: I18n.t(:accept_terms_and_conditions, terms_url: Mumukit::Login.config.terms_url)
         },
+        mustAcceptTerms: true,
         language: I18n.locale,
         allowedConnections: lock_login_methods,
         socialButtonStyle: many_methods? ? 'small' : 'big',
