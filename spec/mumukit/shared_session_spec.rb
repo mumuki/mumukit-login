@@ -25,6 +25,8 @@ describe Mumukit::Login::MucookieSharedSession do
   let(:mucookie) { Mumukit::Login::Mucookie.new controller }
   let(:session) { Mumukit::Login::MucookieSharedSession.new mucookie }
 
+  it { expect(mucookie.spec[:expires]).to be_present }
+
   describe 'uid=' do
     before { session.uid = 'foo@bar.com' }
     it { expect(session.uid).to eq 'foo@bar.com' }

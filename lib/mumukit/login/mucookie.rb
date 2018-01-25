@@ -7,11 +7,9 @@ class Mumukit::Login::Mucookie
 
   def write!(key, value, options={})
     @controller.write_cookie! cookie_name(key),
-                              value: value.to_s,
-                              path: '/',
-                              expires: Mumukit::Login.config.mucookie_duration.days.since,
-                              domain: Mumukit::Login.config.mucookie_domain,
-                              httponly: !!options[:httponly]
+                              spec.merge(
+                                value: value.to_s,
+                                httponly: !!options[:httponly])
   end
 
   def encrypt_and_write!(key, value, options={})
@@ -36,6 +34,12 @@ class Mumukit::Login::Mucookie
 
   def delete!(key)
     @controller.delete_cookie! cookie_name(key), Mumukit::Login.config.mucookie_domain
+  end
+
+  def spec
+    { path: '/',
+      expires: Mumukit::Login.config.mucookie_duration.days.since,
+      domain: Mumukit::Login.config.mucookie_domain }
   end
 
   private
