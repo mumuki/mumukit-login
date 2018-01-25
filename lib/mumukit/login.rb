@@ -26,6 +26,8 @@ module Mumukit::Login
       config.mucookie_secret_salt = ENV['MUMUKI_MUCOOKIE_SECRET_SALT'] || 'mucookie secret salt'
       config.mucookie_sign_salt = ENV['MUMUKI_MUCOOKIE_SIGN_KEY'] || 'mucookie sign salt'
 
+      config.mucookie_duration = ENV['MUMUKI_MUCOOKIE_DURATION'].defaulting(14, &:to_i)
+
       config.provider = Mumukit::Login::Provider.from_env
       config.saml = struct base_url: ENV['MUMUKI_SAML_BASE_URL'],
                            idp_sso_target_url: ENV['MUMUKI_SAML_IDP_SSO_TARGET_URL'],
