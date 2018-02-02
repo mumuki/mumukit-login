@@ -44,7 +44,7 @@ class Mumukit::Login::Settings
             signUpTerms: I18n.t(:accept_terms_and_conditions, terms_url: Mumukit::Login.config.terms_url)
         },
         mustAcceptTerms: true,
-        language: Mumukit::Platform::Locale::SPECS[I18n.locale][:auth0_code],
+        language: Mumukit::Platform::Locale.get_spec_for(I18n.locale, :auth0_code),
         allowedConnections: lock_login_methods,
         socialButtonStyle: many_methods? ? 'small' : 'big',
         rememberLastLogin: true,
