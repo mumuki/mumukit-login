@@ -26,21 +26,25 @@ class Mumukit::Login::Settings
   end
 
   def to_lock_json(callback_url, options={})
-    lock_json
-        .merge(auth: {redirect: true, redirectUrl: callback_url}, responseType: 'code', authParams: {scope: 'openid profile'})
+    lock_json_spec
+        .merge(auth: {
+                redirect: true,
+                redirectUrl: callback_url},
+              responseType: 'code',
+              authParams: { scope: 'openid profile' })
         .merge(options)
         .to_json
         .html_safe
   end
 
-  def lock_json
+  def lock_json_spec
     {
         languageDictionary: {
             title: 'Mumuki',
             signUpTerms: I18n.t(:accept_terms_and_conditions, terms_url: Mumukit::Login.config.terms_url)
         },
         mustAcceptTerms: true,
-        language: I18n.locale,
+        language: Mumukit::Platform::Locale::SPECS[I18n.locale][:auth0_code],
         allowedConnections: lock_login_methods,
         socialButtonStyle: many_methods? ? 'small' : 'big',
         rememberLastLogin: true,
