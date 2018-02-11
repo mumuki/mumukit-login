@@ -7,6 +7,10 @@ class DemoUser
 end
 
 Mumukit::Platform.configure do |config|
+  # User class must understand
+  #     find_by_uid!
+  #     for_profile
+  config.user_class = DemoUser
   config.web_framework = Mumukit::Platform::WebFramework::Rails
 end
 
@@ -15,11 +19,6 @@ Mumukit::Auth.configure do |config|
 end
 
 Mumukit::Login.configure do |config|
-  # User class must understand
-  #     find_by_uid!
-  #     for_profile
-  config.user_class = DemoUser
-
   config.mucookie_domain = '.localmumuki.io'
   config.mucookie_secret_key = 'abcde1213456123456'
   config.mucookie_secret_salt = 'mucookie test secret salt'

@@ -9,7 +9,7 @@ module Mumukit::Login::AuthenticationHelpers
   end
 
   def current_user
-    @current_user ||= Mumukit::Login.config.user_class.find_by_uid!(current_user_uid) if current_user?
+    @current_user ||= Mumukit::Platform::User.find_by_uid!(current_user_uid) if current_user?
   end
 
   private

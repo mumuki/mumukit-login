@@ -11,7 +11,7 @@ module Mumukit::Login::LoginControllerHelpers
 
   def callback_current_user!
     profile = Mumukit::Login::Profile.from_omniauth(mumukit_controller.env['omniauth.auth'])
-    user = Mumukit::Login.config.user_class.for_profile profile
+    user = Mumukit::Platform.user_class.for_profile profile
     save_current_user_session! user
     origin_redirector.redirect_after_login!
   end
