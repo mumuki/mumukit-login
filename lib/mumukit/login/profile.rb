@@ -1,7 +1,6 @@
 module Mumukit::Login::Profile
   def self.from_omniauth(omniauth)
     struct provider: omniauth.provider,
-           name: omniauth.info.nickname || omniauth.info.name,
            first_name: omniauth.info.first_name,
            last_name: omniauth.info.last_name,
            social_id: omniauth.uid,
