@@ -15,7 +15,7 @@ class Mumukit::Login::Provider::Auth0 < Mumukit::Login::Provider::Base
 
   def header_html(*)
     <<HTML
- <script src="https://cdn.auth0.com/js/lock/10.14.0/lock.min.js"></script>		
+ <script src="https://cdn.auth0.com/js/lock/11.5.2/lock.min.js"></script>		
  </script>
 HTML
   end

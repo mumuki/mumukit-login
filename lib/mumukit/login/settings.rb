@@ -53,6 +53,7 @@ class Mumukit::Login::Settings
             primaryColor: '#FF5B81'
         },
         disableResetAction: false,
+        configurationBaseUrl: 'https://cdn.auth0.com',
         closable: false}
   end
 
