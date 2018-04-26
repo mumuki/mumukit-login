@@ -23,7 +23,7 @@ describe Mumukit::Login::Provider do
 
     it { expect(provider.button_html(controller, 'login', 'clazz')).to eq '<a class="clazz" href="/login?origin=/foo">login</a>' }
     it { expect(provider.header_html(controller, login_settings)).to be_present }
-    it { expect(provider.header_html(controller, login_settings)).to include 'https://cdn.auth0.com/js/lock/10.14.0/lock.min.js' }
+    it { expect(provider.header_html(controller, login_settings)).to include 'https://cdn.auth0.com/js/lock/11.5.2/lock.min.js' }
     it { expect(provider.header_html(controller, login_settings)).to_not include 'http://localmumuki.io/auth/auth0/callback' }
 
     it { expect(provider.footer_html(controller)).to be_present }
