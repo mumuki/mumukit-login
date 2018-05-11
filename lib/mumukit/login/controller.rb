@@ -12,6 +12,10 @@ class Mumukit::Login::Controller
     end
   end
 
+  def current_organization
+    Mumukit::Platform::Organization.current
+  end
+
   def mucookie
     @mucookie ||= Mumukit::Login::Mucookie.new self
   end

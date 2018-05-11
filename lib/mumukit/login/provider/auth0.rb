@@ -41,7 +41,7 @@ HTML
   end
 
   def lock_settings(controller, login_settings, options)
-    login_settings.to_lock_json(controller.url_for(callback_path), options)
+    locale = controller.current_organization.locale rescue 'en'
+    login_settings.to_lock_json(controller.url_for(callback_path), locale, options)
   end
-
 end

@@ -25,13 +25,18 @@ class Mumukit::Login::Settings
     login_methods - [:user_pass]
   end
 
-  def to_lock_json(callback_url, options={})
+  def to_lock_json(callback_url, locale, options={})
     lock_json_spec
-        .merge(auth: {
+        .merge(
+            auth: {
                 redirect: true,
-                redirectUrl: callback_url},
-              responseType: 'code',
-              authParams: { scope: 'openid profile' })
+                redirectUrl: callback_url
+            },
+            params: {
+                locale: locale
+            },
+            responseType: 'code',
+            authParams: {scope: 'openid profile'})
         .merge(options)
         .to_json
         .html_safe
