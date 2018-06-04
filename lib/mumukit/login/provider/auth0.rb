@@ -41,7 +41,6 @@ HTML
   end
 
   def lock_settings(controller, login_settings, options)
-    login_settings.to_lock_json(controller.url_for(callback_path), options)
+    login_settings.to_lock_json(controller.url_for(callback_path), Mumukit::Platform::Organization.current_locale, options)
   end
-
 end
