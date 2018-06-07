@@ -21,6 +21,12 @@ describe Mumukit::Login::Settings do
     end
   end
 
+  describe '#to_lock_json' do
+    let(:settings) { Mumukit::Login::Settings.new }
+
+    it { expect(settings.to_lock_json('/foo', 'en')).to be_html_safe }
+  end
+
   describe '#social_methods' do
     context 'with few methods' do
       let(:settings) { Mumukit::Login::Settings.new(facebook_and_user_pass) }
