@@ -48,6 +48,7 @@ class Mumukit::Login::Settings
             title: 'Mumuki',
             signUpTerms: I18n.t(:accept_terms_and_conditions, terms_url: Mumukit::Login.config.terms_url)
         },
+        sso: true,
         mustAcceptTerms: true,
         language: Mumukit::Platform::Locale.get_spec_for(I18n.locale, :auth0_code),
         allowedConnections: lock_login_methods,
