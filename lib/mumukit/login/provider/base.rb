@@ -14,10 +14,7 @@ class Mumukit::Login::Provider::Base
   end
 
   def login_path(controller)
-    create_uri(
-        "/login",
-        { origin: create_uri(controller.request.path, controller.request.params) }
-    )
+    create_uri '/login', origin: create_uri(controller.request.path, controller.request.params)
   end
 
   def auth_path
@@ -48,7 +45,7 @@ class Mumukit::Login::Provider::Base
 
   def create_uri(path, query_values)
     uri = Addressable::URI.heuristic_parse path
-    uri.query_values = query_values if query_values && !query_values.empty?
+    uri.query_values = query_values if query_values.present?
     uri.to_s
   end
 end
