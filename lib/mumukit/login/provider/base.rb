@@ -14,7 +14,7 @@ class Mumukit::Login::Provider::Base
   end
 
   def login_path(controller)
-    "/login?origin=#{controller.request.path}"
+    create_uri '/login', origin: create_uri(controller.request.path, controller.request.params)
   end
 
   def auth_path
@@ -39,5 +39,13 @@ class Mumukit::Login::Provider::Base
 
   def header_html(*)
     nil
+  end
+
+  private
+
+  def create_uri(path, query_values)
+    uri = Addressable::URI.heuristic_parse path
+    uri.query_values = query_values if query_values.present?
+    uri.to_s
   end
 end
