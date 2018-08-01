@@ -5,8 +5,7 @@ describe Mumukit::Login::Provider do
   let(:provider) { Mumukit::Login.config.provider }
   let(:login_settings) { Mumukit::Login::Settings.new }
 
-  before { allow(controller).to receive(:request).and_return(struct path: path, params: params) }
-  let(:path) { '/foo' }
+  before { allow(controller).to receive(:request).and_return(struct path: '/foo', params: params) }
   let(:params) { {} }
 
   describe Mumukit::Login::Provider::Developer do
