@@ -4,6 +4,7 @@ require 'addressable/uri'
 require 'omniauth'
 require 'omniauth-auth0'
 require 'omniauth-saml'
+require 'omniauth-google-oauth2'
 
 require 'mumukit/core'
 require 'mumukit/auth'
@@ -38,6 +39,9 @@ module Mumukit::Login
       config.auth0 = struct client_id: ENV['MUMUKI_AUTH0_CLIENT_ID'],
                             client_secret: ENV['MUMUKI_AUTH0_CLIENT_SECRET'],
                             domain: ENV['MUMUKI_AUTH0_DOMAIN']
+      config.google = struct client_id: ENV['MUMUKI_GOOGLE_CLIENT_ID'],
+                             client_secret: ENV['MUMUKI_GOOGLE_CLIENT_SECRET'],
+                             domain: ENV['MUMUKI_GOOGLE_DOMAIN']
     end
   end
 

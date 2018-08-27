@@ -19,6 +19,8 @@ module Mumukit::Login::Provider
         Mumukit::Login::Provider::Saml.new
       when 'auth0'
         Mumukit::Login::Provider::Auth0.new
+      when 'google'
+        Mumukit::Login::Provider::Google.new
       else
         raise "Unknown login_provider `#{login_provider}`"
     end
@@ -29,3 +31,4 @@ require_relative './provider/base'
 require_relative './provider/saml'
 require_relative './provider/auth0'
 require_relative './provider/developer'
+require_relative './provider/google'
