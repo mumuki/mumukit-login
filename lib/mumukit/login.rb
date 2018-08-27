@@ -40,8 +40,7 @@ module Mumukit::Login
                             client_secret: ENV['MUMUKI_AUTH0_CLIENT_SECRET'],
                             domain: ENV['MUMUKI_AUTH0_DOMAIN']
       config.google = struct client_id: ENV['MUMUKI_GOOGLE_CLIENT_ID'],
-                             client_secret: ENV['MUMUKI_GOOGLE_CLIENT_SECRET'],
-                             domain: ENV['MUMUKI_GOOGLE_DOMAIN']
+                             client_secret: ENV['MUMUKI_GOOGLE_CLIENT_SECRET']
     end
   end
 
