@@ -37,7 +37,7 @@ module Mumukit::Login::Provider
     end
   end
 
-  def self.parse_login_provider(login_provider, provider_settings = nil)
+  def self.parse_login_provider(login_provider, provider_settings = {})
     if enabled_providers.include? login_provider
       "Mumukit::Login::Provider::#{login_provider.capitalize}".constantize.new provider_settings
     else
