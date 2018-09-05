@@ -74,7 +74,7 @@ module Mumukit::Login
   # @param [OmniAuth::Builder] omniauth
   #
   def self.configure_omniauth!(omniauth)
-    provider.configure_omniauth! omniauth
+    Mumukit::Login::Provider.setup_providers! omniauth
   end
 
   def self.configure_login_routes!(native)

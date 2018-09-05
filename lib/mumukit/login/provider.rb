@@ -1,4 +1,11 @@
 module Mumukit::Login::Provider
+  PROVIDERS = %w(
+    developer
+    saml
+    auth0
+    google
+  )
+
   def self.from_env
     parse_login_provider(login_provider_string)
   end
@@ -24,6 +31,10 @@ module Mumukit::Login::Provider
       else
         raise "Unknown login_provider `#{login_provider}`"
     end
+  end
+
+  def self.setup_providers!(omniauth)
+    PROVIDERS.each { |it| parse_login_provider(it).configure_omniauth!(omniauth) }
   end
 end
 
