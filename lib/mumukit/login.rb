@@ -96,7 +96,7 @@ module Mumukit::Login
   end
 
   def self.provider
-    Mumukit::Login.config.provider
+    Mumukit::Platform::Organization.current.login_provider || config.provider
   end
 end
 

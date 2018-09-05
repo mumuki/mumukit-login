@@ -2,7 +2,7 @@ require_relative '../spec_helper'
 
 describe Mumukit::Login::Provider do
   let(:controller) { double(:controller) }
-  let(:provider) { Mumukit::Login.config.provider }
+  let(:provider) { Mumukit::Login.provider }
   let(:login_settings) { Mumukit::Login::Settings.new }
 
   before { allow(controller).to receive(:request).and_return(struct path: '/foo', params: params) }
