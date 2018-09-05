@@ -14,7 +14,14 @@ class Mumukit::Login::Provider::Base
   end
 
   def login_path(controller)
-    create_uri '/login', origin: create_uri(controller.request.path, controller.request.params)
+    create_uri '/login', login_path_params(controller)
+  end
+
+  def login_path_params(controller)
+    {
+        origin: create_uri(controller.request.path, controller.request.params),
+        organization: Mumukit::Platform::Organization.current.name
+    }
   end
 
   def auth_path
