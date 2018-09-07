@@ -79,8 +79,12 @@ class Mumukit::Login::Settings
 end
 
 class Mumukit::Platform::Organization::Settings < Mumukit::Platform::Model
+  alias_method :_login_provider, :login_provider
+
+  delegate :login_provider, to: :login_settings
+
   def login_settings
-    Mumukit::Login::Settings.new(login_methods, login_provider, provider_settings)
+    Mumukit::Login::Settings.new(login_methods, _login_provider, provider_settings)
   end
 
   def customized_login_methods?
