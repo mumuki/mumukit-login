@@ -78,7 +78,7 @@ end
 
 class Mumukit::Platform::Organization::Settings < Mumukit::Platform::Model
   def login_settings
-    @login_settings ||= Mumukit::Login::Settings.new(login_methods)
+    Mumukit::Login::Settings.new(login_methods)
   end
 
   def customized_login_methods?
