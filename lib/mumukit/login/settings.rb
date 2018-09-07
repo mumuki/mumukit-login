@@ -9,7 +9,7 @@ class Mumukit::Login::Settings
 
   attr_reader :login_methods, :login_provider, :provider_settings
 
-  def initialize(login_methods = Mumukit::Login::Settings.default_methods, login_provider, provider_settings)
+  def initialize(login_methods = Mumukit::Login::Settings.default_methods, login_provider = nil, provider_settings = nil)
     @login_methods = login_methods.map(&:to_sym)
     @login_provider = login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it }
     @provider_settings = provider_settings
