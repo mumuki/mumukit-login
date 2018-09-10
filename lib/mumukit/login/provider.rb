@@ -46,6 +46,12 @@ module Mumukit::Login::Provider
   end
 end
 
+module Mumukit::Platform::Organization::Helpers
+  def login_provider_object
+    @login_provider_object ||= login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it } # add provider settings in the future
+  end
+end
+
 require_relative './provider/base'
 require_relative './provider/saml'
 require_relative './provider/auth0'
