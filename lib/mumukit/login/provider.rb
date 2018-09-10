@@ -53,7 +53,7 @@ module Mumukit::Platform::Organization::Helpers
 end
 
 require_relative './provider/base'
-require_relative './provider/saml'
-require_relative './provider/auth0'
-require_relative './provider/developer'
-require_relative './provider/google'
+
+Mumukit::Login::Provider.enabled_providers.each do |it|
+  require_relative "./provider/#{it}"
+end
