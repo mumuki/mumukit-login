@@ -33,11 +33,6 @@ class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
                       }
   end
 
-  def configure_rails_forgery_protection!(_controller_class)
-    # FIXME this is big security issue
-    # Do nothing (do not protect): the IdP calls the assertion_url via POST and without the CSRF token
-  end
-
   def logout_redirection_path
     "#{auth_path}/spslo"
   end

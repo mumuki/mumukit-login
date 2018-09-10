@@ -9,10 +9,6 @@ class Mumukit::Login::Provider::Base
     controller.redirect! auth_path
   end
 
-  def configure_rails_forgery_protection!(action_controller)
-    action_controller.protect_from_forgery with: :exception
-  end
-
   def login_path(controller)
     create_uri '/login', login_path_params(controller)
   end
