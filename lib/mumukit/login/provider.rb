@@ -10,6 +10,14 @@ module Mumukit::Login::Provider
     parse_login_provider(login_provider_string)
   end
 
+  def self.enabled_providers
+    if ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].blank?
+      PROVIDERS
+    else
+      ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].split ', '
+    end
+  end
+
   def self.login_provider_string
     if ENV['MUMUKI_LOGIN_PROVIDER'].blank? || ENV['RACK_ENV'] == 'test' || ENV['RAILS_ENV'] == 'test'
       'developer'
@@ -34,7 +42,7 @@ module Mumukit::Login::Provider
   end
 
   def self.setup_providers!(omniauth)
-    PROVIDERS.each { |it| parse_login_provider(it).configure_omniauth!(omniauth) }
+    enabled_providers.each { |it| parse_login_provider(it).configure_omniauth!(omniauth) }
   end
 end
 
