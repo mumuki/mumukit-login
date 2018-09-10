@@ -7,11 +7,11 @@ class Mumukit::Login::Settings
       user_pass: 'Username-Password-Authentication'
   }
 
-  attr_reader :login_methods, :login_provider, :provider_settings
+  attr_reader :login_methods, :login_provider_object, :provider_settings
 
   def initialize(login_methods = Mumukit::Login::Settings.default_methods, login_provider = nil, provider_settings = nil)
     @login_methods = login_methods.map(&:to_sym)
-    @login_provider = login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it }
+    @login_provider_object = login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it }
     @provider_settings = provider_settings
   end
 
@@ -78,13 +78,13 @@ class Mumukit::Login::Settings
   end
 end
 
+module Mumukit::Platform::Organization::Helpers
+  delegate :login_provider_object, to: :login_settings
+end
+
 class Mumukit::Platform::Organization::Settings < Mumukit::Platform::Model
-  alias_method :_login_provider, :login_provider
-
-  delegate :login_provider, to: :login_settings
-
   def login_settings
-    Mumukit::Login::Settings.new(login_methods, _login_provider, provider_settings)
+    Mumukit::Login::Settings.new(login_methods, login_provider, provider_settings)
   end
 
   def customized_login_methods?
