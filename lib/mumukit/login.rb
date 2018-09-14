@@ -30,6 +30,7 @@ module Mumukit::Login
       config.mucookie_duration = ENV['MUMUKI_MUCOOKIE_DURATION'].defaulting(14, &:to_i)
 
       config.provider = Mumukit::Login::Provider.from_env
+
       config.saml = struct base_url: ENV['MUMUKI_SAML_BASE_URL'],
                            idp_sso_target_url: ENV['MUMUKI_SAML_IDP_SSO_TARGET_URL'],
                            idp_slo_target_url: ENV['MUMUKI_SAML_IDP_SLO_TARGET_URL'],
@@ -74,7 +75,7 @@ module Mumukit::Login
   # @param [OmniAuth::Builder] omniauth
   #
   def self.configure_omniauth!(omniauth)
-    provider.configure_omniauth! omniauth
+    Mumukit::Login::Provider.setup_providers! omniauth
   end
 
   def self.configure_login_routes!(native)
@@ -96,7 +97,7 @@ module Mumukit::Login
   end
 
   def self.provider
-    Mumukit::Login.config.provider
+    Mumukit::Platform::Organization.current.login_provider_object || config.provider
   end
 end
 

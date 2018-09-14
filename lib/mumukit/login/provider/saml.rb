@@ -14,9 +14,6 @@ class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
                       idp_sso_target_url: saml_config.idp_sso_target_url,
                       idp_slo_target_url: saml_config.idp_slo_target_url,
                       slo_default_relay_state: saml_config.base_url,
-                      idp_cert: File.read('./saml_idp.crt'),
-                      certificate: File.read('./saml.crt'),
-                      private_key: File.read('./saml.key'),
                       attribute_service_name: 'Mumuki',
                       request_attributes: [
                           {name: 'email', name_format: 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', friendly_name: 'Email address'},
@@ -27,12 +24,13 @@ class Mumukit::Login::Provider::Saml < Mumukit::Login::Provider::Base
                           name: [saml_config.translation_name],
                           email: [saml_config.translation_email],
                           image: [saml_config.translation_image]
+                      },
+                      setup: lambda { |env|
+                        options = env['omniauth.strategy'].options
+                        options[:idp_cert] = File.read('./saml_idp.crt')  # This is just a quickfix to avoid breaking if there are no saml configuration files.
+                        options[:certificate] = File.read('./saml.crt')   # It could also serve to parametrize these files by organization
+                        options[:private_key] = File.read('./saml.key')   # and have multiple organizations with different saml providers though.
                       }
-  end
-
-  def configure_rails_forgery_protection!(_controller_class)
-    # FIXME this is big security issue
-    # Do nothing (do not protect): the IdP calls the assertion_url via POST and without the CSRF token
   end
 
   def logout_redirection_path

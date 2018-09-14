@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 
 describe Mumukit::Login do
-  let(:provider) { Mumukit::Login.config.provider }
+  let(:provider) { Mumukit::Login.provider }
 
   it { expect(provider).to be_a Mumukit::Login::Provider::Developer }
   it { expect(provider.name).to eq 'developer' }

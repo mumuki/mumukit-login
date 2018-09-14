@@ -7,7 +7,7 @@ class Mumukit::Login::Settings
       user_pass: 'Username-Password-Authentication'
   }
 
-  attr_accessor :login_methods
+  attr_reader :login_methods
 
   def initialize(login_methods = Mumukit::Login::Settings.default_methods)
     @login_methods = login_methods.map(&:to_sym)

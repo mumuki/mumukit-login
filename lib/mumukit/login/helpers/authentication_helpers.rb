@@ -37,6 +37,6 @@ module Mumukit::Login::AuthenticationHelpers
   end
 
   def login_provider
-    Mumukit::Login.config.provider
+    Mumukit::Login.provider
   end
 end

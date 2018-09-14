@@ -8,6 +8,7 @@ describe Mumukit::Login::Form do
   let(:builder) { Mumukit::Login::Form.new(provider, controller, login_settings) }
 
   before { allow(controller).to receive(:request).and_return(struct path: 'http://localmumuki.io/foo') }
+  before { DemoOrganization.new.switch! }
 
   it { expect(builder.footer_html).to be_html_safe }
   it { expect(builder.header_html).to be_html_safe }

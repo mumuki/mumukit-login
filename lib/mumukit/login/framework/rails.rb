@@ -64,7 +64,6 @@ module Mumukit::Platform::WebFramework::Rails
   # @param [ActionController::Base::Class] controller_class
   #
   def self.configure_controller!(controller_class)
-    Mumukit::Login.config.provider.configure_rails_forgery_protection!(controller_class)
     controller_class.class_eval do
       include Mumukit::Login::AuthenticationHelpers
       include Mumukit::Login::AuthorizationHelpers
