@@ -39,7 +39,8 @@ module Mumukit::Login
                            translation_email: ENV['MUMUKI_SAML_TRANSLATION_EMAIL'] || 'email',
                            translation_image: ENV['MUMUKI_SAML_TRANSLATION_IMAGE'] || 'image'
       config.cas = struct url: ENV['MUMUKI_CAS_URL'],
-                          host: ENV['MUMUKI_CAS_HOST']
+                          host: ENV['MUMUKI_CAS_HOST'],
+                          disable_ssl_verification: ENV['MUMUKI_CAS_DISABLE_SSL_VERIFICATION'] == 'true'
       config.auth0 = struct client_id: ENV['MUMUKI_AUTH0_CLIENT_ID'],
                             client_secret: ENV['MUMUKI_AUTH0_CLIENT_SECRET'],
                             domain: ENV['MUMUKI_AUTH0_DOMAIN']
