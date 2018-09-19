@@ -2,6 +2,7 @@ module Mumukit::Login::Provider
   PROVIDERS = %w(
     developer
     saml
+    cas
     auth0
     google
   )
@@ -13,7 +14,7 @@ module Mumukit::Login::Provider
   def self.default_enabled_providers
     case ENV['RAILS_ENV'] || ENV['RACK_ENV']
       when 'production'
-        %w(auth0 saml google)
+        PROVIDERS - %w(developer)
       when 'test'
         PROVIDERS
       else
@@ -25,7 +26,7 @@ module Mumukit::Login::Provider
     if ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].blank?
       default_enabled_providers
     else
-      ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].split ', '
+      ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].split ','
     end
   end
 
@@ -37,7 +38,7 @@ module Mumukit::Login::Provider
     end
   end
 
-  def self.parse_login_provider(login_provider, provider_settings = nil)
+  def self.parse_login_provider(login_provider, provider_settings = {})
     if enabled_providers.include? login_provider
       "Mumukit::Login::Provider::#{login_provider.capitalize}".constantize.new provider_settings
     else
