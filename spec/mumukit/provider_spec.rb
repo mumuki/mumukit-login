@@ -8,6 +8,34 @@ describe Mumukit::Login::Provider do
   before { allow(controller).to receive(:request).and_return(struct path: '/foo', params: params) }
   let(:params) { {} }
 
+  describe 'providers listings' do
+    it { expect(Mumukit::Login::Provider::PROVIDERS.count).to eq 5 }
+
+    describe '.default_enabled_providers' do
+      context 'when on test env' do
+        it { expect(Mumukit::Login::Provider.default_enabled_providers.count).to eq 5 }
+      end
+
+      context 'when on prod env' do
+        before { ENV['RAILS_ENV'] = 'production' }
+        after { ENV['RAILS_ENV'] = 'test' }
+        it { expect(Mumukit::Login::Provider.default_enabled_providers).to_not include('developer') }
+      end
+    end
+
+    describe '.enabled_providers' do
+      context 'when enabled providers not specified' do
+        it { expect(Mumukit::Login::Provider.enabled_providers.count).to eq 5 }
+      end
+
+      context 'when enabled providers specified' do
+        before { ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'] = 'google,cas' }
+        after { ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'] = nil }
+        it { expect(Mumukit::Login::Provider.enabled_providers.count).to eq 2 }
+      end
+    end
+  end
+
   describe Mumukit::Login::Provider::Developer do
     let(:provider) { Mumukit::Login::Provider::Developer.new }
 

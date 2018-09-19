@@ -14,7 +14,7 @@ module Mumukit::Login::Provider
   def self.default_enabled_providers
     case ENV['RAILS_ENV'] || ENV['RACK_ENV']
       when 'production'
-        %w(auth0 saml google)
+        PROVIDERS - %w(developer)
       when 'test'
         PROVIDERS
       else
@@ -26,7 +26,7 @@ module Mumukit::Login::Provider
     if ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].blank?
       default_enabled_providers
     else
-      ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].split ', '
+      ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].split ','
     end
   end
 
