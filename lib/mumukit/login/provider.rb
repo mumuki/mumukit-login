@@ -2,6 +2,7 @@ module Mumukit::Login::Provider
   PROVIDERS = %w(
     developer
     saml
+    cas
     auth0
     google
   )
