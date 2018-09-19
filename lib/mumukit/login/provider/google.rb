@@ -1,8 +1,6 @@
 class Mumukit::Login::Provider::Google < Mumukit::Login::Provider::Base
   def configure_omniauth!(omniauth)
-    omniauth.provider :google_oauth2,
-                      google_config.client_id,
-                      google_config.client_secret
+    omniauth.provider :google_oauth2, setup: setup_proc
   end
 
   def name
@@ -11,7 +9,7 @@ class Mumukit::Login::Provider::Google < Mumukit::Login::Provider::Base
 
   private
 
-  def google_config
+  def default_settings
     Mumukit::Login.config.google
   end
 end

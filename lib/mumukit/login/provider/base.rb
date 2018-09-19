@@ -1,9 +1,5 @@
 class Mumukit::Login::Provider::Base
 
-  def initialize(provider_settings = nil)
-    @provider_settings = provider_settings
-  end
-
   def name
     @name ||= self.class.name.demodulize.downcase
   end
@@ -47,6 +43,37 @@ class Mumukit::Login::Provider::Base
 
   def header_html(*)
     nil
+  end
+
+  def setup_proc
+    proc do |env|
+      options = env['omniauth.strategy'].options
+
+      effective_settings = default_settings.to_h.merge(Organization.current.login_provider_settings)
+      options.merge(effective_settings)
+      options.merge(computed_settings(effective_settings.to_struct))
+    end
+  end
+
+  # Default provider settings that come from the environment
+  #
+  # Override this method in order to read ENV and in order to provide default settings
+  #
+  # These setting can be overriden by organization's `provider_settings`
+  # and by the provider's `computed_settings`
+  def default_settings
+    {}
+  end
+
+  # Provider settings that are computed based on effective settings - that is,
+  # the default settings merged with the organizations settings.
+  #
+  # Override this method in order to provide settings that depend not only on the organization
+  # or defaults, but also commputed expressions.
+  #
+  # These settings can not be overriden.
+  def computed_settings(effective_settings)
+    {}
   end
 
   private

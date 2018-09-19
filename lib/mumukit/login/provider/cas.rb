@@ -1,16 +1,16 @@
 class Mumukit::Login::Provider::Cas < Mumukit::Login::Provider::Base
   def configure_omniauth!(omniauth)
-    omniauth.provider :cas,
-                      url: cas_config.url,
-                      host: cas_config.host,
-                      disable_ssl_verification: cas_config.disable_ssl_verification,
-                      ca_path: '.'
+    omniauth.provider :cas, setup: setup_proc
   end
 
   private
 
-  def cas_config
+  def default_settings
     Mumukit::Login.config.cas
+  end
+
+  def computed_settings(_cas)
+    { ca_path: '.' }
   end
 end
 
