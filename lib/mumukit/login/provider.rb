@@ -37,18 +37,11 @@ module Mumukit::Login::Provider
     end
   end
 
-  def self.parse_login_provider(login_provider)
-    case login_provider
-      when 'developer'
-        Mumukit::Login::Provider::Developer.new
-      when 'saml'
-        Mumukit::Login::Provider::Saml.new
-      when 'auth0'
-        Mumukit::Login::Provider::Auth0.new
-      when 'google'
-        Mumukit::Login::Provider::Google.new
-      else
-        raise "Unknown login_provider `#{login_provider}`"
+  def self.parse_login_provider(login_provider, provider_settings = nil)
+    if enabled_providers.include? login_provider
+      "Mumukit::Login::Provider::#{login_provider.capitalize}".constantize.new provider_settings
+    else
+      raise "Unknown login_provider `#{login_provider}`"
     end
   end
 
@@ -59,7 +52,7 @@ end
 
 module Mumukit::Platform::Organization::Helpers
   def login_provider_object
-    @login_provider_object ||= login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it } # add provider settings in the future
+    @login_provider_object ||= login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it, provider_settings }
   end
 end
 

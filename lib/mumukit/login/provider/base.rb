@@ -1,4 +1,9 @@
 class Mumukit::Login::Provider::Base
+
+  def initialize(provider_settings = nil)
+    @provider_settings = provider_settings.try { |it| JSON.parse it }
+  end
+
   def name
     @name ||= self.class.name.demodulize.downcase
   end
