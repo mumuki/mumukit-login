@@ -77,6 +77,23 @@ describe Mumukit::Login::Provider do
         it { expect(omniauth_options).to eq a: 1, b: 2, c: 2 }
       end
     end
+
+    context 'when provider provides computed settings' do
+      class SampleComputedProvider < Mumukit::Login::Provider::Base
+        def computed_settings(effective)
+          { d: effective.c.present? }
+        end
+      end
+      let(:provider) { SampleComputedProvider.new }
+      context 'when organization does not provide settings' do
+        let(:organization_login_provider_settings) { nil }
+        it { expect(omniauth_options).to eq d: false }
+      end
+      context 'when organization provides settings' do
+        let(:organization_login_provider_settings) { { b:2, c: 2 } }
+        it { expect(omniauth_options).to eq b: 2, c: 2, d: true }
+      end
+    end
   end
 
   describe Mumukit::Login::Provider::Developer do
