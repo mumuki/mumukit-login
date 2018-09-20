@@ -49,10 +49,14 @@ class Mumukit::Login::Provider::Base
     proc do |env|
       options = env['omniauth.strategy'].options
 
-      effective_settings = default_settings.to_h.merge(Mumukit::Platform::Organization.current.login_provider_settings)
+      effective_settings = default_settings.to_h.merge(current_organization_settings)
       options.merge!(effective_settings)
       options.merge!(computed_settings(effective_settings.to_struct))
     end
+  end
+
+  def current_organization_settings
+    Mumukit::Platform::Organization.current.login_provider_settings || {}
   end
 
   # Default provider settings that come from the environment

@@ -39,7 +39,7 @@ describe Mumukit::Login::Provider do
   describe Mumukit::Login::Provider::Base do
     let(:env) { { 'omniauth.strategy' => struct(options: {}) } }
     let(:omniauth_options) { env['omniauth.strategy'].options }
-
+    before { Mumukit::Platform::Organization.current.login_provider_settings = organization_login_provider_settings }
     before { provider.setup_proc.call(env) }
 
     context 'when provider does not provide settings' do
@@ -48,10 +48,15 @@ describe Mumukit::Login::Provider do
       let(:provider) { SimplestSampleProvider.new }
 
       context 'when organization does not provide settings' do
+        let(:organization_login_provider_settings) { nil }
+        it { expect(omniauth_options).to eq({}) }
+      end
+      context 'when organization provides empty settings' do
+        let(:organization_login_provider_settings) { {} }
         it { expect(omniauth_options).to eq({}) }
       end
       context 'when organization provides settings' do
-        before { Mumukit::Platform::Organization.current.login_provider_settings = { b:2, c: 2 } }
+        let(:organization_login_provider_settings) { { b:2, c: 2 } }
         it { expect(omniauth_options).to eq b: 2, c: 2 }
       end
     end
@@ -64,10 +69,11 @@ describe Mumukit::Login::Provider do
       end
       let(:provider) { SampleProviderWithDefaults.new }
       context 'when organization does not provide settings' do
+        let(:organization_login_provider_settings) { nil }
         it { expect(omniauth_options).to eq a: 1, b: 1 }
       end
       context 'when organization provides settings' do
-        before { Mumukit::Platform::Organization.current.login_provider_settings = { b:2, c: 2 } }
+        let(:organization_login_provider_settings) { { b:2, c: 2 } }
         it { expect(omniauth_options).to eq a: 1, b: 2, c: 2 }
       end
     end
