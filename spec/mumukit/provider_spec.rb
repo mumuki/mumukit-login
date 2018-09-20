@@ -17,8 +17,8 @@ describe Mumukit::Login::Provider do
       end
 
       context 'when on prod env' do
-        before { ENV['RAILS_ENV'] = 'production' }
-        after { ENV['RAILS_ENV'] = 'test' }
+        before { ENV['RACK_ENV'] = 'production' }
+        after { ENV['RACK_ENV'] = 'test' }
         it { expect(Mumukit::Login::Provider.default_enabled_providers).to_not include('developer') }
       end
     end
