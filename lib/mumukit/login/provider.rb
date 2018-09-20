@@ -12,7 +12,7 @@ module Mumukit::Login::Provider
   end
 
   def self.default_enabled_providers
-    case ENV['RAILS_ENV'] || ENV['RACK_ENV']
+    case ENV['RACK_ENV'] || ENV['RAILS_ENV']
       when 'production'
         PROVIDERS - %w(developer)
       when 'test'
