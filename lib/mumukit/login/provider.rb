@@ -12,7 +12,7 @@ module Mumukit::Login::Provider
   end
 
   def self.default_enabled_providers
-    case ENV['RAILS_ENV'] || ENV['RACK_ENV']
+    case ENV['RACK_ENV'] || ENV['RAILS_ENV']
       when 'production'
         PROVIDERS - %w(developer)
       when 'test'
@@ -38,9 +38,9 @@ module Mumukit::Login::Provider
     end
   end
 
-  def self.parse_login_provider(login_provider, provider_settings = {})
+  def self.parse_login_provider(login_provider)
     if enabled_providers.include? login_provider
-      "Mumukit::Login::Provider::#{login_provider.capitalize}".constantize.new provider_settings
+      "Mumukit::Login::Provider::#{login_provider.capitalize}".constantize.new
     else
       raise "Unknown login_provider `#{login_provider}`"
     end
@@ -53,7 +53,7 @@ end
 
 module Mumukit::Platform::Organization::Helpers
   def login_provider_object
-    @login_provider_object ||= login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it, provider_settings }
+    @login_provider_object ||= login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it }
   end
 end
 

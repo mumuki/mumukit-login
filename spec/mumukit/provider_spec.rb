@@ -17,8 +17,8 @@ describe Mumukit::Login::Provider do
       end
 
       context 'when on prod env' do
-        before { ENV['RAILS_ENV'] = 'production' }
-        after { ENV['RAILS_ENV'] = 'test' }
+        before { ENV['RACK_ENV'] = 'production' }
+        after { ENV['RACK_ENV'] = 'test' }
         it { expect(Mumukit::Login::Provider.default_enabled_providers).to_not include('developer') }
       end
     end
@@ -32,6 +32,66 @@ describe Mumukit::Login::Provider do
         before { ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'] = 'google,cas' }
         after { ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'] = nil }
         it { expect(Mumukit::Login::Provider.enabled_providers.count).to eq 2 }
+      end
+    end
+  end
+
+  describe Mumukit::Login::Provider::Base do
+    let(:env) { { 'omniauth.strategy' => struct(options: {}) } }
+    let(:omniauth_options) { env['omniauth.strategy'].options }
+    before { Mumukit::Platform::Organization.current.login_provider_settings = organization_login_provider_settings }
+    before { provider.setup_proc.call(env) }
+
+    context 'when provider does not provide settings' do
+      class SimplestSampleProvider < Mumukit::Login::Provider::Base
+      end
+      let(:provider) { SimplestSampleProvider.new }
+
+      context 'when organization does not provide settings' do
+        let(:organization_login_provider_settings) { nil }
+        it { expect(omniauth_options).to eq({}) }
+      end
+      context 'when organization provides empty settings' do
+        let(:organization_login_provider_settings) { {} }
+        it { expect(omniauth_options).to eq({}) }
+      end
+      context 'when organization provides settings' do
+        let(:organization_login_provider_settings) { { b:2, c: 2 } }
+        it { expect(omniauth_options).to eq b: 2, c: 2 }
+      end
+    end
+
+    context 'when provider provides default settings' do
+      class SampleProviderWithDefaults < Mumukit::Login::Provider::Base
+        def default_settings
+          { a: 1, b: 1 }
+        end
+      end
+      let(:provider) { SampleProviderWithDefaults.new }
+      context 'when organization does not provide settings' do
+        let(:organization_login_provider_settings) { nil }
+        it { expect(omniauth_options).to eq a: 1, b: 1 }
+      end
+      context 'when organization provides settings' do
+        let(:organization_login_provider_settings) { { b:2, c: 2 } }
+        it { expect(omniauth_options).to eq a: 1, b: 2, c: 2 }
+      end
+    end
+
+    context 'when provider provides computed settings' do
+      class SampleComputedProvider < Mumukit::Login::Provider::Base
+        def computed_settings(effective)
+          { d: effective.c.present? }
+        end
+      end
+      let(:provider) { SampleComputedProvider.new }
+      context 'when organization does not provide settings' do
+        let(:organization_login_provider_settings) { nil }
+        it { expect(omniauth_options).to eq d: false }
+      end
+      context 'when organization provides settings' do
+        let(:organization_login_provider_settings) { { b:2, c: 2 } }
+        it { expect(omniauth_options).to eq b: 2, c: 2, d: true }
       end
     end
   end
