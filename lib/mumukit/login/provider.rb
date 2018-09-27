@@ -31,8 +31,8 @@ module Mumukit::Login::Provider
   end
 
   def self.login_provider_string
-    if ENV['MUMUKI_LOGIN_PROVIDER'].blank? || ENV['RACK_ENV'] == 'test' || ENV['RAILS_ENV'] == 'test'
-      'developer'
+    if ENV['MUMUKI_LOGIN_PROVIDER'].blank?
+      enabled_providers.first
     else
       ENV['MUMUKI_LOGIN_PROVIDER']
     end
