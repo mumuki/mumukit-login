@@ -11,8 +11,8 @@ module Mumukit::Login::Provider
     parse_login_provider(login_provider_string)
   end
 
-  def self.default_enabled_providers
-    case ENV['RACK_ENV'] || ENV['RAILS_ENV']
+  def self.default_enabled_providers                  # This is a list of the default enabled login providers
+    case ENV['RACK_ENV'] || ENV['RAILS_ENV']          # It depends only on the current environment
       when 'production'
         PROVIDERS - %w(developer)
       when 'test'
@@ -22,17 +22,17 @@ module Mumukit::Login::Provider
     end
   end
 
-  def self.enabled_providers
-    if ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].blank?
+  def self.enabled_providers                          # This is a list of the login providers enabled on the current instance of the platform
+    if ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].blank?   # It is obtained from the environment, and if unset, it defaults to default_enabled_providers
       default_enabled_providers
     else
       ENV['MUMUKI_ENABLED_LOGIN_PROVIDERS'].split ','
     end
   end
 
-  def self.login_provider_string
-    if ENV['MUMUKI_LOGIN_PROVIDER'].blank?
-      enabled_providers.first
+  def self.login_provider_string                      # This is the default login provider used when it is not overriden in the organization's config
+    if ENV['MUMUKI_LOGIN_PROVIDER'].blank?            # It is obtained from env, and defaults to the first of the current enabled providers
+      enabled_providers.first                         # It should always be a provider within the enabled_providers list
     else
       ENV['MUMUKI_LOGIN_PROVIDER']
     end
