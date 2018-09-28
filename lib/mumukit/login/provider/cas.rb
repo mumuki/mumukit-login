@@ -8,10 +8,6 @@ class Mumukit::Login::Provider::Cas < Mumukit::Login::Provider::Base
   def default_settings
     Mumukit::Login.config.cas
   end
-
-  def computed_settings(_cas)
-    { ca_path: '.' }
-  end
 end
 
 # Monkey-patching to support phpCAS implementation
