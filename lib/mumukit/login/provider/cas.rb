@@ -27,3 +27,26 @@ module OmniAuth
     end
   end
 end
+
+module OmniAuth
+  module Strategies
+    class CAS
+      class ServiceTicketValidator
+        def get_service_response_body
+          result = ''
+          http = Net::HTTP.new(@uri.host, @uri.port)
+          http.use_ssl = @uri.port == 443 || @uri.instance_of?(URI::HTTPS)
+          if http.use_ssl?
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @options.disable_ssl_verification?
+            http.cert = OpenSSL::X509::Certificate.new @options.ssl_certificate
+          end
+          http.start do |c|
+            response = c.get "#{@uri.path}?#{@uri.query}", VALIDATION_REQUEST_HEADERS.dup
+            result = response.body
+          end
+          result
+        end
+      end
+    end
+  end
+end
