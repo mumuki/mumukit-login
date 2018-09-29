@@ -38,7 +38,7 @@ module OmniAuth
           http.use_ssl = @uri.port == 443 || @uri.instance_of?(URI::HTTPS)
           if http.use_ssl?
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @options.disable_ssl_verification?
-            http.cert = OpenSSL::X509::Certificate.new @options.ssl_certificate
+            http.cert = @options.ssl_certificate.try { |it| OpenSSL::X509::Certificate.new it }
           end
           http.start do |c|
             response = c.get "#{@uri.path}?#{@uri.query}", VALIDATION_REQUEST_HEADERS.dup
