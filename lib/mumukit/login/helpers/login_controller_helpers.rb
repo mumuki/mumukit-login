@@ -1,6 +1,7 @@
 module Mumukit::Login::LoginControllerHelpers
 
   def login_current_user!
+    mumukit_controller.write_cookie!(:login_organization, organization_name)
     origin_redirector.save_after_login_location!
     if current_user?
       origin_redirector.redirect_after_login!
