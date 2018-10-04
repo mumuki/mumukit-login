@@ -29,6 +29,7 @@ Mumukit::Platform.configure do |config|
   #     for_profile
   config.user_class = DemoUser
   config.web_framework = Mumukit::Platform::WebFramework::Rails
+  config.organization_class = DemoOrganization
 end
 
 Mumukit::Auth.configure do |config|
