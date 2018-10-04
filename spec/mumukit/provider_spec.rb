@@ -6,6 +6,7 @@ describe Mumukit::Login::Provider do
   let(:login_settings) { Mumukit::Login::Settings.new }
 
   before { allow(controller).to receive(:request).and_return(struct path: '/foo', params: params) }
+  before { allow(DemoOrganization).to receive(:find_by_name!).and_return(Mumukit::Platform::Organization.current) }
   let(:params) { {} }
 
   describe 'providers listings' do
