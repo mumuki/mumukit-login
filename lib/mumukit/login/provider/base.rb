@@ -48,16 +48,10 @@ class Mumukit::Login::Provider::Base
   def setup_proc
     proc do |env|
       options = env['omniauth.strategy'].options
-      request = Rack::Request.new(env)
-      current_organization = request.cookies['login_organization']
-      effective_settings = default_settings.to_h.merge(organization_settings current_organization)
+      effective_settings = default_settings.to_h.merge(setup_phase_login_settings(env))
       options.merge!(effective_settings)
       options.merge!(computed_settings(effective_settings.to_struct))
     end
-  end
-
-  def organization_settings(name)
-    Mumukit::Platform::Organization.find_by_name!(name).login_provider_settings || {}
   end
 
   # Default provider settings that come from the environment
@@ -82,6 +76,18 @@ class Mumukit::Login::Provider::Base
   end
 
   private
+
+  def setup_phase_login_settings(env)
+    organization_login_settings_for setup_phase_login_organization_name(env)
+  end
+
+  def setup_phase_login_organization_name(env)
+    Rack::Request.new(env).cookies['login_organization']
+  end
+
+  def organization_login_settings_for(name)
+    Mumukit::Platform::Organization.find_by_name!(name).login_provider_settings || {}
+  end
 
   def create_uri(path, query_values)
     uri = Addressable::URI.heuristic_parse path
