@@ -22,6 +22,14 @@ class Mumukit::Login::MucookieSharedSession
     @mucookie.encode_and_write! :profile, profile.to_json
   end
 
+  def login_organization
+    @mucookie.decrypt_and_read :login_organization
+  end
+
+  def login_organization=(organization_name)
+    @mucookie.encrypt_and_write! :login_organization, organization_name
+  end
+
   def current_organization_name=(organization_name)
     @mucookie.write! :organization, organization_name
   end

@@ -82,7 +82,15 @@ class Mumukit::Login::Provider::Base
   end
 
   def setup_phase_login_organization_name(env)
-    Rack::Request.new(env).cookies['login_organization']
+    shared_session_from_env(env).login_organization
+  end
+
+  def shared_session_from_env(env)
+    Mumukit::Login::MucookieSharedSession.new(mucookie_from_env(env))
+  end
+
+  def mucookie_from_env(env)
+    Mumukit::Login::Mucookie.new(RackController.new(env))
   end
 
   def organization_login_settings_for(name)
@@ -93,5 +101,16 @@ class Mumukit::Login::Provider::Base
     uri = Addressable::URI.heuristic_parse path
     uri.query_values = query_values if query_values.present?
     uri.to_s
+  end
+
+  class RackController
+
+    def initialize(env)
+      @env = env
+    end
+
+    def read_cookie(cookie)
+      Rack::Request.new(@env).cookies[cookie]
+    end
   end
 end
