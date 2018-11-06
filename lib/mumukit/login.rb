@@ -14,10 +14,7 @@ require 'mumukit/platform'
 I18n.load_translations_path File.join(__dir__, '..', 'locales', '*.yml')
 
 module Mumukit::Login
-  def self.configure
-    @config ||= defaults
-    yield @config
-  end
+  extend Mumukit::Core::Configurable
 
   def self.defaults
     struct.tap do |config|
@@ -48,10 +45,6 @@ module Mumukit::Login
       config.google = struct client_id: ENV['MUMUKI_GOOGLE_CLIENT_ID'],
                              client_secret: ENV['MUMUKI_GOOGLE_CLIENT_SECRET']
     end
-  end
-
-  def self.config
-    @config
   end
 end
 
