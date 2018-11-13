@@ -5,6 +5,7 @@ module Mumukit::Login::Provider
     saml
     cas
     google
+    oauth2
   )
 
   def self.from_env

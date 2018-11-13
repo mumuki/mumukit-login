@@ -6,6 +6,7 @@ require 'omniauth-auth0'
 require 'omniauth-saml'
 require 'omniauth-cas'
 require 'omniauth-google-oauth2'
+require 'omniauth-oauth2'
 
 require 'mumukit/core'
 require 'mumukit/auth'
