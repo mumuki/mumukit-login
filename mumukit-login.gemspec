@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov'
 
   spec.add_dependency 'rack', '>= 1.5'
+  spec.add_dependency 'jwt', '~> 1.5'
   spec.add_dependency 'addressable'
   spec.add_dependency 'omniauth', '~> 1.2'
   spec.add_dependency 'omniauth-auth0', '~> 1.1'
