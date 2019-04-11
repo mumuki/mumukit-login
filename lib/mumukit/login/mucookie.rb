@@ -49,6 +49,9 @@ class Mumukit::Login::Mucookie
   end
 
   module Encryptor
+    # message encryptor requires a 32-byte key
+    MESSAGE_ENCRYPTOR_SECRET_SIZE = 32
+
     def self.key_generator
       @key_generator ||= begin
         secret_key = Mumukit::Login.config.mucookie_secret_key
@@ -67,7 +70,7 @@ class Mumukit::Login::Mucookie
         raise 'missing Mumukit::Login.config.mucookie_secret_salt' unless mucookie_secret_salt
         raise 'missing Mumukit::Login.config.mucookie_sign_salt' unless mucookie_sign_salt
 
-        secret = key_generator.generate_key(mucookie_secret_salt)
+        secret = key_generator.generate_key(mucookie_secret_salt, MESSAGE_ENCRYPTOR_SECRET_SIZE)
         signature = key_generator.generate_key(mucookie_sign_salt)
         ActiveSupport::MessageEncryptor.new(secret, signature)
       end
