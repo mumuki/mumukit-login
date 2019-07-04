@@ -8,20 +8,20 @@ class DemoUser
 end
 
 class DemoOrganization
-  include Mumukit::Platform::Organization::Helpers
+  include Mumukit::Login::OrganizationHelpers
 
-  attr_accessor :name, :profile, :settings
+  attr_accessor :login_provider, :login_provider_settings
 
-  def initialize
-    @name = 'orga'
-    @profile =  Mumukit::Platform::Organization::Profile.new community_link: 'http://link/to/community',
-                                                             terms_of_service: 'The TOS',
-                                                             description: 'the description'
-    @settings = Mumukit::Platform::Organization::Settings.new
+  def name
+    'orga'
+  end
+
+  def locale
+    'es'
   end
 end
 
-DemoOrganization.new.switch!
+Mumukit::Platform::Organization.switch! DemoOrganization.new
 
 Mumukit::Platform.configure do |config|
   # User class must understand

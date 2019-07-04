@@ -106,6 +106,20 @@ You can override the following methods:
 * `login_methods`
 * `destroy_session_user_uid!`, `save_session_user_uid!`, `current_user_uid`
 
+
+## Requirements
+
+In order to properly use this gem, your _organization_ and _user_ objects - as defined by `Mumukit::Platform` - must implement some additional required methods:
+
+_organization_:
+  * `#login_provider`
+  * `#login_provider_settings`
+  * `#login_provider_object` (but can be provided by `Mumukit::Login::OrganizationHelpers`)
+
+_user_:
+  * `.for_profile`
+
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

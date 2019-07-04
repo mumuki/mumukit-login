@@ -58,12 +58,6 @@ module Mumukit::Login::Provider
   end
 end
 
-module Mumukit::Platform::Organization::Helpers
-  def login_provider_object
-    @login_provider_object ||= login_provider.try { |it| Mumukit::Login::Provider.parse_login_provider it }
-  end
-end
-
 require_relative './provider/base'
 
 Mumukit::Login::Provider.enabled_providers.each do |it|
