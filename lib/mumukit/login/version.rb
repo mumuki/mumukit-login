@@ -1,5 +1,5 @@
 module Mumukit
   module Login
-    VERSION = '6.1.9'
+    VERSION = '7.0.0'
   end
 end
