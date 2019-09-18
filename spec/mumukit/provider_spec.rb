@@ -10,11 +10,11 @@ describe Mumukit::Login::Provider do
   let(:params) { {} }
 
   describe 'providers listings' do
-    it { expect(Mumukit::Login::Provider::PROVIDERS.count).to eq 5 }
+    it { expect(Mumukit::Login::Provider::PROVIDERS.count).to eq 6 }
 
     describe '.default_enabled_providers' do
       context 'when on test env' do
-        it { expect(Mumukit::Login::Provider.default_enabled_providers.count).to eq 5 }
+        it { expect(Mumukit::Login::Provider.default_enabled_providers.count).to eq 6 }
       end
 
       context 'when on prod env' do
@@ -26,7 +26,7 @@ describe Mumukit::Login::Provider do
 
     describe '.enabled_providers' do
       context 'when enabled providers not specified' do
-        it { expect(Mumukit::Login::Provider.enabled_providers.count).to eq 5 }
+        it { expect(Mumukit::Login::Provider.enabled_providers.count).to eq 6 }
       end
 
       context 'when enabled providers specified' do
