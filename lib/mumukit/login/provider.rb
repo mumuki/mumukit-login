@@ -5,6 +5,7 @@ module Mumukit::Login::Provider
     saml
     cas
     google
+    keycloak
   )
 
   def self.from_env

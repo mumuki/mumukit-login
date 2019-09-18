@@ -44,6 +44,13 @@ module Mumukit::Login
                             domain: ENV['MUMUKI_AUTH0_DOMAIN']
       config.google = struct client_id: ENV['MUMUKI_GOOGLE_CLIENT_ID'],
                              client_secret: ENV['MUMUKI_GOOGLE_CLIENT_SECRET']
+      config.keycloak = struct client_id: ENV['MUMUKI_KEYCLOAK_CLIENT_ID'],
+                               client_secret: ENV['MUMUKI_KEYCLOAK_CLIENT_SECRET'],
+                               client_options: {
+                                 authorize_url: ENV['MUMUKI_KEYCLOAK_AUTHORIZE_URL'],
+                                 token_url: ENV['MUMUKI_KEYCLOAK_TOKEN_URL'],
+                                 cert: ENV['MUMUKI_KEYCLOAK_CERT'].defaulting({}) { |it| JSON.parse(it) }
+                               }
     end
   end
 end
