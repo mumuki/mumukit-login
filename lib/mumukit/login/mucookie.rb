@@ -9,7 +9,8 @@ class Mumukit::Login::Mucookie
     @controller.write_cookie! cookie_name(key),
                               spec.merge(
                                 value: value.to_s,
-                                httponly: !!options[:httponly])
+                                httponly: !!options[:httponly],
+                                same_site: self.class.cookie_same_site)
   end
 
   def encrypt_and_write!(key, value, options={})
@@ -37,9 +38,19 @@ class Mumukit::Login::Mucookie
   end
 
   def spec
-    { path: '/',
+    {
+      path: '/',
       expires: Mumukit::Login.config.mucookie_duration.days.since,
-      domain: Mumukit::Login.config.mucookie_domain }
+      domain: Mumukit::Login.config.mucookie_domain
+    }
+  end
+
+  def self.cookie_same_site
+    if %w(RACK_ENV RAILS_ENV).any? { |it| ENV[it] == 'production' }
+      :none
+    else
+      :lax
+    end
   end
 
   private
