@@ -33,8 +33,16 @@ describe Mumukit::Login::MucookieSharedSession do
     it { expect(controller.hash.size).to eq 1 }
     it { expect(controller.hash['mucookie_session']).to json_like({path: '/',
                                                                    domain: '.localmumuki.io',
-                                                                   httponly: true},
+                                                                   httponly: true,
+                                                                   same_site: :lax},
                                                                   except: [:value, :expires]) }
+
+    context 'when in production' do
+      before(:all) { ENV['RACK_ENV'] = 'production' }
+      after { ENV['RACK_ENV'] = 'test' }
+
+      it { expect(controller.hash['mucookie_session'][:same_site]).to eq :none }
+    end
   end
 
   describe '#profile=' do
@@ -43,7 +51,8 @@ describe Mumukit::Login::MucookieSharedSession do
     it { expect(controller.hash.size).to eq 1 }
     it { expect(controller.hash['mucookie_profile']).to json_like({path: '/',
                                                                    domain: '.localmumuki.io',
-                                                                   httponly: false},
+                                                                   httponly: false,
+                                                                   same_site: :lax},
                                                                   except: [:value, :expires]) }
   end
 
