@@ -82,7 +82,7 @@ class Mumukit::Login::Provider::Base
   end
 
   def setup_phase_login_organization_name(env)
-    Rack::Request.new(env).cookies['login_organization']
+    Rack::Request.new(env).cookies['mucookie_login_organization']
   end
 
   def organization_login_settings_for(name)
