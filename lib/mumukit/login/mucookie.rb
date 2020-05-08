@@ -6,11 +6,10 @@ class Mumukit::Login::Mucookie
   end
 
   def write!(key, value, options={})
-    @controller.write_cookie! cookie_name(key),
-                              spec.merge(
-                                value: value.to_s,
-                                httponly: !!options[:httponly],
-                                same_site: self.class.cookie_same_site)
+    do_write! cookie_name(key),
+              spec.merge(
+                value: value.to_s,
+                httponly: !!options[:httponly])
   end
 
   def encrypt_and_write!(key, value, options={})
@@ -22,7 +21,7 @@ class Mumukit::Login::Mucookie
   end
 
   def read(key)
-    @controller.read_cookie cookie_name(key)
+    do_read!(cookie_name(key))
   end
 
   def decrypt_and_read(key)
@@ -34,7 +33,7 @@ class Mumukit::Login::Mucookie
   end
 
   def delete!(key)
-    @controller.delete_cookie! cookie_name(key), Mumukit::Login.config.mucookie_domain
+    do_delete! cookie_name(key), Mumukit::Login.config.mucookie_domain
   end
 
   def spec
@@ -54,6 +53,22 @@ class Mumukit::Login::Mucookie
   end
 
   private
+
+  # Support for legacy browsers
+  # Duplicate write / read / delete cookies without samesite for old browsers that do not allow for SameSite=None attribute
+  def do_write!(cookie_name, spec)
+    @controller.write_cookie! cookie_name, spec.merge(same_site: self.class.cookie_same_site)
+    @controller.write_cookie! "#{cookie_name}_legacy", spec
+  end
+
+  def do_delete!(cookie_name, domain)
+    @controller.delete_cookie! cookie_name, domain
+    @controller.delete_cookie! "#{cookie_name}_legacy", domain
+  end
+
+  def do_read!(cookie_name)
+    @controller.read_cookie(cookie_name) || @controller.read_cookie("#{cookie_name}_legacy")
+  end
 
   def cookie_name(key)
     "mucookie_#{key}"
@@ -95,5 +110,4 @@ class Mumukit::Login::Mucookie
       value.try { |it| encryptor.decrypt_and_verify it }
     end
   end
-
 end
