@@ -30,12 +30,16 @@ describe Mumukit::Login::MucookieSharedSession do
   describe 'uid=' do
     before { session.uid = 'foo@bar.com' }
     it { expect(session.uid).to eq 'foo@bar.com' }
-    it { expect(controller.hash.size).to eq 1 }
+    it { expect(controller.hash.size).to eq 2 }
     it { expect(controller.hash['mucookie_session']).to json_like({path: '/',
                                                                    domain: '.localmumuki.io',
                                                                    httponly: true,
                                                                    same_site: :lax},
                                                                   except: [:value, :expires]) }
+    it { expect(controller.hash['mucookie_session_legacy']).to json_like({path: '/',
+                                                                          domain: '.localmumuki.io',
+                                                                          httponly: true},
+                                                                         except: [:value, :expires]) }
 
     context 'when in production' do
       before(:all) { ENV['RACK_ENV'] = 'production' }
@@ -48,12 +52,16 @@ describe Mumukit::Login::MucookieSharedSession do
   describe '#profile=' do
     before { session.profile = {name: 'John'} }
     it { expect(session.profile).to json_like name: 'John' }
-    it { expect(controller.hash.size).to eq 1 }
+    it { expect(controller.hash.size).to eq 2 }
     it { expect(controller.hash['mucookie_profile']).to json_like({path: '/',
                                                                    domain: '.localmumuki.io',
                                                                    httponly: false,
                                                                    same_site: :lax},
                                                                   except: [:value, :expires]) }
+    it { expect(controller.hash['mucookie_profile_legacy']).to json_like({path: '/',
+                                                                          domain: '.localmumuki.io',
+                                                                          httponly: false},
+                                                                         except: [:value, :expires]) }
   end
 
   describe '#clear!' do
