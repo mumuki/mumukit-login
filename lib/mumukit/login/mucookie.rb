@@ -111,3 +111,5 @@ class Mumukit::Login::Mucookie
     end
   end
 end
+
+require_relative 'mucookie/store'
