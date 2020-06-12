@@ -1,9 +1,9 @@
 module Mumukit::Login::Profile
   def self.from_omniauth(omniauth)
-    struct identity_hash(omniauth)
+    struct profile_hash(omniauth)
   end
 
-  def self.identity_hash(omniauth)
+  def self.profile_hash(omniauth)
     {
       provider: omniauth.provider,
       first_name: omniauth.info.first_name,
