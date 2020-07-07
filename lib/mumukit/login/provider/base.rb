@@ -78,6 +78,9 @@ class Mumukit::Login::Provider::Base
     {}
   end
 
+  def finalize_user_creation!(_user)
+  end
+
   private
 
   def setup_phase_login_settings(env)
