@@ -19,6 +19,7 @@ module Mumukit::Login::LoginControllerHelpers
 
   def logout_current_user!
     destroy_current_user_session!
+    login_provider.destroy_session! mumukit_controller
     origin_redirector.redirect_after_logout!
   end
 
