@@ -45,6 +45,9 @@ class Mumukit::Login::Provider::Base
     nil
   end
 
+  def destroy_session!(_controller)
+  end
+
   def setup_proc
     proc do |env|
       options = env['omniauth.strategy'].options
