@@ -11,7 +11,8 @@ module Mumukit::Login::Profile
       social_id: omniauth.uid,
       email: omniauth.info.email,
       uid: generate_uid(omniauth),
-      image_url: omniauth.info.image
+      image_url: omniauth.info.image,
+      email_verified: omniauth.extra.raw_info.email_verified
     }.compact
   end
 
