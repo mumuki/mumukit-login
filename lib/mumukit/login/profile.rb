@@ -16,6 +16,6 @@ module Mumukit::Login::Profile
   end
 
   def self.generate_uid(omniauth)
-    omniauth.uid || omniauth.info.email
+    Mumukit::Login::Provider.parse_login_provider(omniauth.provider).uid_for_profile(omniauth)
   end
 end

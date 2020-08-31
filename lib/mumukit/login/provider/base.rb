@@ -81,6 +81,10 @@ class Mumukit::Login::Provider::Base
   def finalize_user_creation!(_user)
   end
 
+  def uid_for_profile(omniauth)
+    omniauth.info.email || omniauth.uid
+  end
+
   private
 
   def setup_phase_login_settings(env)
