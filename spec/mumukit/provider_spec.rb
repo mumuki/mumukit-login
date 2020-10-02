@@ -134,4 +134,28 @@ describe Mumukit::Login::Provider do
     it { expect(provider.header_html(controller)).to be_blank }
     it { expect(provider.footer_html(controller)).to be_blank }
   end
+
+  describe '.parse_login_provider' do
+    let(:provider) { Mumukit::Login::Provider.parse_login_provider(provider_name) }
+
+    context 'accepts strings' do
+      let(:provider_name) { 'cas' }
+
+      it { expect { provider }.to_not raise_error }
+      it { expect(provider).to be_a Mumukit::Login::Provider::Cas }
+    end
+
+    context 'accepts strings' do
+      let(:provider_name) { :cas }
+
+      it { expect { provider }.to_not raise_error }
+      it { expect(provider).to be_a Mumukit::Login::Provider::Cas }
+    end
+
+    context 'raises error when provider does not exist' do
+      let(:provider_name) { :some_provider }
+
+      it { expect { provider }.to raise_error 'Unknown login_provider `some_provider`' }
+    end
+  end
 end
