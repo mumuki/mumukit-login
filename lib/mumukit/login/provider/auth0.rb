@@ -28,9 +28,11 @@ HTML
   end
 
   def footer_html(*)
-    '<a href="https://auth0.com/" target="_blank">
+    '<div class="mu-footer-login-provider">
+       <a href="https://auth0.com/" target="_blank">
         <img height="40" alt="JWT Auth for open source projects" src="//cdn.auth0.com/oss/badges/a0-badge-light.png"/>
-     </a>'
+       </a>
+    </div>'
   end
 
   private
