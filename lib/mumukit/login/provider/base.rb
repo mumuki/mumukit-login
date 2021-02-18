@@ -96,7 +96,7 @@ class Mumukit::Login::Provider::Base
   end
 
   def changed_sync_fields_for(user)
-    user.saved_changes.slice(*synced_user_fields)
+    user.saved_changes.slice(*synced_user_fields).transform_values!(&:last)
   end
 
   # Override this method in order to specify fields that should be updated on
