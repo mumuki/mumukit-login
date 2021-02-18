@@ -71,7 +71,7 @@ class Mumukit::Login::Provider::Base
   # the default settings merged with the organizations settings.
   #
   # Override this method in order to provide settings that depend not only on the organization
-  # or defaults, but also commputed expressions.
+  # or defaults, but also computed expressions.
   #
   # These settings can not be overriden.
   def computed_settings(effective_settings)
@@ -81,11 +81,29 @@ class Mumukit::Login::Provider::Base
   def finalize_user_creation!(_user)
   end
 
+  def sync_user_fields!(user)
+    user_changed_fields_h = changed_sync_fields_for(user)
+    update_user_fields!(user, user_changed_fields_h) if user_changed_fields_h.present?
+  end
+
   def uid_for_profile(omniauth)
     omniauth.info.email || omniauth.uid
   end
 
   private
+
+  def update_user_fields!(_user, _user_changed_fields)
+  end
+
+  def changed_sync_fields_for(user)
+    user.saved_changes.slice(*synced_user_fields)
+  end
+
+  # Override this method in order to specify fields that should be updated on
+  # provider when any of those change on user
+  def synced_user_fields
+    []
+  end
 
   def setup_phase_login_settings(env)
     organization_login_settings_for setup_phase_login_organization_name(env)
