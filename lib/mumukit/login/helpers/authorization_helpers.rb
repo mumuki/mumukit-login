@@ -15,5 +15,11 @@ module Mumukit::Login::AuthorizationHelpers
     current_user.has_permission? role, authorization_slug
   end
 
+  Mumukit::Auth::Roles::ROLES.each do |role|
+    define_method "authorize_#{role}!" do
+      authorize! role
+    end
+  end
+
   required :authorization_slug
 end
