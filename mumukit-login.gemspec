@@ -33,6 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'omniauth-google-oauth2', '~> 0.5'
   spec.add_dependency 'mumukit-core', '~> 1.8'
   spec.add_dependency 'mumukit-auth', '~> 7.0'
-  spec.add_dependency 'mumukit-platform', '~> 6.0'
+  spec.add_dependency 'mumukit-platform', '~> 7.0'
   spec.add_dependency 'actionpack', '~> 5.1'
 end
