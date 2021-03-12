@@ -29,6 +29,15 @@ module OmniAuth
           result
         end
       end
+
+      def service_validate_url(service_url, ticket)
+        service_url = Addressable::URI.parse(service_url)
+        service_url.query_values = service_url.query_values.tap { |qs| qs.delete('ticket') }
+        cas_url + append_params(options.service_validate_url, {
+          service: service_url.to_s.sub(/\?$/, ''),
+          ticket: ticket
+        })
+      end
     end
   end
 end
