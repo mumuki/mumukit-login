@@ -17,8 +17,6 @@ class Mumukit::Login::OriginRedirector
     @controller.session[:redirect_after_login] = origin
   end
 
-  private
-
   def origin
     Addressable::URI.heuristic_parse(@controller.request.params['origin'] || '/').to_s
   end
