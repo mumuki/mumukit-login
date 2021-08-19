@@ -1,4 +1,5 @@
 module Mumukit::Login::LoginControllerHelpers
+  delegate :redirect_after_logout!, to: :origin_redirector
 
   def login_current_user!
     mumukit_controller.mucookie.write!(:login_organization, organization_name)
@@ -19,8 +20,7 @@ module Mumukit::Login::LoginControllerHelpers
 
   def logout_current_user!
     destroy_current_user_session!
-    login_provider.destroy_session! mumukit_controller
-    origin_redirector.redirect_after_logout!
+    login_provider.logout_current_user! self
   end
 
   private

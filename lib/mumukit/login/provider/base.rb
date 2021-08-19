@@ -45,7 +45,8 @@ class Mumukit::Login::Provider::Base
     nil
   end
 
-  def destroy_session!(_controller)
+  def logout_current_user!(controller)
+    controller.redirect_after_logout!
   end
 
   def setup_proc
