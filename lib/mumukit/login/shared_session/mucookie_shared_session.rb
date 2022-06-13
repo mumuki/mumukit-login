@@ -36,9 +36,4 @@ class Mumukit::Login::MucookieSharedSession
 
   def decode_session(uid)
   end
-
-  def decode_token(uid)
-    Mumukit::Auth::Token.encode uid, {exp: Mumukit::Login.config.session_duration.days.from_now}, encoding_client
-  end
-
 end
