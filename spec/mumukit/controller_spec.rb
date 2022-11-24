@@ -20,7 +20,7 @@ describe Mumukit::Login::Controller do
 
   describe '#shared_session' do
     context 'when there is an AUTHORIZATION header' do
-      let(:header) { Mumukit::Auth::Token.encode_header('tomson24', {}) }
+      let(:header) { Mumukit::Auth::Token.build('tomson24').encode_header }
       before { allow(framework).to receive(:env).and_return('HTTP_AUTHORIZATION' => header) }
 
       it { expect(controller.shared_session).to be_a Mumukit::Login::TokenSharedSession }
